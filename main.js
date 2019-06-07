@@ -53,3 +53,16 @@ const newWin = () => {
 app.on('ready', newWin)
 app.on('window-all-closed', () => app.quit())
 app.on('activate', () => win === null && newWin())
+
+// custom code
+
+const ipcMain = electron.ipcMain
+const Menu = electron.Menu
+const menuTemplate = require('./menu-template')
+
+ipcMain.on('setMenu', (event, arg) => {
+	const template = menuTemplate(arg)
+
+	const menu = Menu.buildFromTemplate(template)
+	Menu.setApplicationMenu(menu)
+})

@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 module.exports = {
   mode: 'spa',
   head: { title: 'attendance' }, // Headers of the page
@@ -15,9 +17,18 @@ module.exports = {
       }
       // Extend only webpack config for client-bundle
       if (isClient) { config.target = 'electron-renderer' }
-    }
+    },
+    vendor: [
+      'lodash',
+      'moment',
+      'numeral'
+    ],
   },
   dev: process.env.NODE_ENV === 'DEV',
+  env: {
+    clientSecret: process.env.clientSecret || '',
+    baseUrl:  process.env.baseUrl || 'http://localhost'
+  },
   css: [
     '@/assets/css/global.css'
   ],
@@ -25,6 +36,9 @@ module.exports = {
     '@nuxtjs/axios',
     '@nuxtjs/auth',
     '@nuxtjs/vuetify'
+  ],
+  plugins: [
+    { src: '~/plugins/index' }
   ],
   auth: {
     redirect: {
