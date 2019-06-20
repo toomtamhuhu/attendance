@@ -48,7 +48,7 @@ export default {
         })
         this.$router.push('/')
       } catch (e) {
-        // this.errorAlert(e)
+        this.errorAlert(e)
         this.loading = false
       }
     }, 300),

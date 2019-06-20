@@ -33,6 +33,15 @@ const newWin = () => {
 		icon: path.join(__dirname, 'static/icon.png')
 	})
 	win.maximize()
+	win.on('close', e => {
+		var choice = electron.dialog.showMessageBox({
+			type: 'question',
+			buttons: ['ยืนยัน', 'ยกเลิก'],
+			title: 'ออกจาก',
+			message: 'ยืนยันการออกจากโปรแกรม'
+		})
+		if (choice == 1) e.preventDefault()
+	})
 	win.on('closed', () => win = null)
 	if (config.dev) {
 		// Install vue dev tool and open chrome dev tools

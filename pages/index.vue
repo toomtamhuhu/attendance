@@ -1,13 +1,18 @@
 <template>
 	<v-app>
 		<v-content>
-			<v-container>Hello world</v-container>
+			<v-container>Hello word</v-container>
 		</v-content>
 	</v-app>
 </template>
 
 <script>
 export default {
+	data() {
+		return {
+			users: []
+		}
+	}
 }
 </script>
 
