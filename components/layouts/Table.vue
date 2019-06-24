@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-card>
+    <v-card v-if="table">
       <div>
         <v-card-title>
           <v-spacer />
@@ -8,41 +8,40 @@
           <v-spacer />
           <v-spacer />
           <v-text-field
-              v-model="tableData.search"
+              v-if="tableData.search"
+              v-model="search"
               append-icon="search"
-              label="Search"
+              label="ค้นหา"
               single-line
               hide-details
-          ></v-text-field>
+          />
         </v-card-title>
       </div>
       <v-data-table
           :headers="tableData.headers"
           :items="tableData.desserts"
-          :search="tableData.search"
-          hide-actions
-          :pagination.sync="pagination"
+          :rows-per-page-items="[25,50,100]"
+          :search="search"
           class="elevation-1"
       >
         <template v-slot:items="props">
-          <div>{{ props }}</div>
-          <td>{{ props.item.name }}</td>
-          <td class="text-xs-right">{{ props.item.calories }}</td>
-          <td class="text-xs-right">{{ props.item.fat }}</td>
-          <td class="text-xs-right">{{ props.item.carbs }}</td>
-          <td class="text-xs-right">{{ props.item.protein }}</td>
-          <td class="text-xs-right">{{ props.item.iron }}</td>
+          <template v-for="(f, i) in tableData.headers">
+            <template>
+              <slot v-if="f.slot" :name="f.value" :data="props.item" />
+              <td :key="i" v-else>{{ getObjectData(props.item, f) }}</td>
+            </template>
+          </template>
         </template>
       </v-data-table>
-      <div class="text-xs-center pt-2">
-        <v-pagination v-model="pagination.page" :length="pages"></v-pagination>
-      </div>
     </v-card>
   </div>
 </template>
 
 <script>
 export default {
+  asyncData ({ params }) {
+  },
+
   props: {
     table: {
       type: Object
@@ -51,8 +50,13 @@ export default {
 
   data () {
     return {
+      search: '',
       pagination: {},
     }
+  },
+
+  created() {
+
   },
 
   computed: {
@@ -60,15 +64,14 @@ export default {
       return {
         headers: this.table.headers ? this.table.headers : [],
         desserts: this.table.desserts ? this.table.desserts : [],
-        search: '',
+        search: typeof this.table.search !== 'undefined' ? this.table.search : true,
       }
-    },
-    pages () {
-      if (this.pagination.rowsPerPage == null ||
-        this.pagination.totalItems == null
-      ) return 0
+    }
+  },
 
-      return Math.ceil(this.pagination.totalItems / this.pagination.rowsPerPage)
+  methods: {
+    getObjectData (data, field) {
+      return data[field.value]
     }
   }
 }
