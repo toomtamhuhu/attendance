@@ -17,6 +17,13 @@
           </v-btn>
         </template>
         <v-card>
+          <v-layout justify-end>
+            <v-flex xs12 sm1>
+              <v-btn flat icon color="red" @click="closeDialog">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </v-flex>
+          </v-layout>
           <slot name="header"/>
 
           <slot name="content"/>
@@ -41,10 +48,10 @@
 <script>
 export default {
   props: {
-    // dialog: {
-    //   type: Boolean,
-    //   default: false
-    // },
+    open: {
+      type: Boolean,
+      default: false
+    },
     color: {
       type: String,
       default: 'primary'
@@ -64,24 +71,19 @@ export default {
   },
   data() {
     return {
-      open: false,
       dialog: false
     }
   },
   watch: {
-    dialog (data) {
-      if (data) this.openDialog()
+    open (data) {
+      if (data) this.dialog = true
     }
   },
   methods: {
-    async openDialog() {
-      try {
-        this.open = true
-      } catch (e) {
-        this.$emit('closed')
-      }
+    async closeDialog () {
+      this.dialog = false
+      this.$emit('closed')
     },
-
     async save () {
       this.dialog = false
       this.$emit('submitted')

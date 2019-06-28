@@ -4,6 +4,7 @@ import Branches from './branches'
 import Permissions from './permissions'
 import WorkRules from './work_rules'
 import Users from './users'
+import Employees from './employees'
 
 const createStore = () => {
   return new Vuex.Store({
@@ -13,7 +14,8 @@ const createStore = () => {
       Branches,
       Permissions,
       WorkRules,
-      Users
+      Users,
+      Employees
     }
   })
 }

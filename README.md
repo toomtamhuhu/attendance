@@ -35,3 +35,13 @@ or
 2.0.18 is Electron version
 
 The output will be inside build/Release/binding.node Then you can copy that file into your `node_modules/node-sass/vendor/<some-thing>` folder.
+
+## Rebuild zkfp
+```
+cd c_addons/zkfp
+
+node-gyp configure build
+
+node-gyp rebuild --target=2.0.18 --arch=x64 --dist-url=https://electronjs.org/headers
+```
+if error `iojs.lib`, delete `/usr/.node-gyp` and re-install `npm install node-gyp -g`

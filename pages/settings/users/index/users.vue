@@ -1,7 +1,7 @@
 <template>
   <v-page>
     <div slot="content">
-      <CreateOrEditButtonComponent :color="'info'" @closed="close" @submitted="save">
+      <v-create-update-button :open="open" :color="'info'" @closed="resetForm" @submitted="save">
         <template slot="header">
           <v-card-title class="headline">ผู้ใช้</v-card-title>
         </template>
@@ -32,13 +32,26 @@
             </v-form>
           </v-card-text>
         </template>
-      </CreateOrEditButtonComponent>
+      </v-create-update-button>
       <v-divider class="my-3"/>
       <v-table :table="tableData">
         <template slot="info" slot-scope="{ data }">
-          <v-btn small outline fab color="indigo" @click="show(data)">
-            <v-icon>edit</v-icon>
-          </v-btn>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn small outline fab color="indigo" v-on="on" @click="show(data)">
+                <v-icon>edit</v-icon>
+              </v-btn>
+            </template>
+            <span>ข้อมูล</span>
+          </v-tooltip>
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn small outline fab color="error" v-on="on" @click="remove(data)">
+                <v-icon>close</v-icon>
+              </v-btn>
+            </template>
+            <span>ลบ</span>
+          </v-tooltip>
         </template>
       </v-table>
     </div>
@@ -46,17 +59,10 @@
 </template>
 
 <script>
-import CreateOrEditButtonComponent from '@/components/layouts/CreateOrEditButtonComponent'
-import gql from 'graphql-tag'
-
 export default {
-  components: {
-    CreateOrEditButtonComponent
-  },
-
   data () {
     return {
-      dialog: false,
+      open: false,
       users: [],
       form: {
         name: null,
@@ -93,34 +99,69 @@ export default {
   methods: {
     async show (data) {
       Object.assign(this.form, data)
-      this.dialog = true
+      this.open = true
     },
-    async save () {
-      try {
-        await this.$apollo.mutate({
-          mutation: gql`mutation ($name: String!, $username: String!, $password: String!) {
-          createUser(name: $name, username: $username, password: $password) {
+    async remove (data) {
+      if (!confirm('ลบผู้ใช้?')) return
+      await this.$apollo.mutate({
+        mutation: gql`mutation ($id: ID!) {
+          deleteUser(id: $id) {
               id
               name
               username
             }
           }`,
-          variables: {
-            name: this.form.name,
-            username: this.form.username,
-            password: this.form.password,
-          },
-          update: (store, { data: { createUser } }) => {
-            this.updateCache(store, createUser)
-          }
-        })
+        variables: {
+          id: data.id
+        },
+        update: (store, { data: { deleteUser } }) => {
+          this.updateCache(store, deleteUser, 'deleted')
+        }
+      })
+    },
+    async save () {
+      try {
+        if (this.form.id) {
+          await this.$apollo.mutate({
+            mutation: gql`mutation ($id: ID!, $name: String!, $username: String!) {
+              updateUser(id: $id, name: $name, username: $username) {
+                  id
+                  name
+                  username
+                }
+              }`,
+            variables: {
+              id: this.form.id,
+              name: this.form.name,
+              username: this.form.username
+            }
+          })
+        } else {
+          await this.$apollo.mutate({
+            mutation: gql`mutation ($name: String!, $username: String!, $password: String!) {
+              createUser(name: $name, username: $username, password: $password) {
+                  id
+                  name
+                  username
+                }
+              }`,
+            variables: {
+              name: this.form.name,
+              username: this.form.username,
+              password: this.form.password,
+            },
+            update: (store, { data: { createUser } }) => {
+              this.updateCache(store, createUser, 'created')
+            }
+          })
+        }
       } catch (e) {
         console.log(e)
       } finally {
         this.resetForm()
       }
     },
-    updateCache (store, data) {
+    updateCache (store, data, state) {
       const query = {
         query: gql`query {
           users {
@@ -131,7 +172,12 @@ export default {
         }`,
       }
       const cache = store.readQuery(query)
-      cache.users.push(data)
+      if (state === 'created') {
+        cache.users.push(data)
+      } else {
+        const index = cache.users.indexOf(data)
+        cache.users.splice(index, 1)
+      }
       // store.writeQuery({
       //   ...query,
       //   cache
@@ -141,6 +187,7 @@ export default {
       this.resetForm()
     },
     resetForm () {
+      this.open = false
       this.form = {
         name: null,
         username: null,

@@ -1,3 +1,5 @@
+import axios from 'axios'
+
 export default {
   namespaced: true,
 
@@ -30,11 +32,19 @@ export default {
   actions: {
     async fetch ({ commit }) {
       try {
-        const res = await this.$axios.$get('/api/branches')
-        commit('data', _.orderBy(_.reduce(res, (pre, cur) => {
-          if (cur.department_id === 4) pre.push(cur)
-          return pre
-        }, []), ['name']))
+        const res = await axios({
+          method: "GET",
+          url: "http://vue-hrm.huhu/graphql",
+          data: {
+            query: `{
+            branchesByDept(department_id: 4) {
+                id
+                name
+              }
+            }`
+          }
+        })
+        commit('data', _.orderBy(res.data.data.branchesByDept, ['name']))
       } catch (e) {
         throw e
       }

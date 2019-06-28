@@ -1,7 +1,7 @@
 <template>
 	<div>
 		<v-app>
-			<v-content>
+			<v-content class="blue lighten-4">
 				<v-container grid-list-md>
 					<nuxt/>
 				</v-container>
@@ -36,12 +36,13 @@ export default {
   created() {
 		ipcRenderer.send('setMenu', [
 			{label: 'Home', link: '/'},
-			{label: 'ตั้งค่ากะงาน', link: '/work-rules'},
+			{label: 'ลงเวลา', link: '/attendances'},
+			{label: 'เพิ่มนิ้ว พนง.', link: '/finger-print'},
 			{
 				label: 'ตั้งค่า',
 				permission: this.can('settings'),
 				submenu: [
-					{ label: 'ผู้ใช้', link: '/settings/users' },
+					// { label: 'ผู้ใช้', link: '/settings/users' },
 					{ label: 'กะการทำงาน', link: '/settings/work-rules' }
 				]
 			}

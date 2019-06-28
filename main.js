@@ -28,6 +28,9 @@ let win = null // Current window
 const electron = require('electron')
 const path = require('path')
 const app = electron.app
+
+const ZKFPScan = require('./zkfp-scan')
+
 const newWin = () => {
 	win = new electron.BrowserWindow({
 		icon: path.join(__dirname, 'static/icon.png')
@@ -74,4 +77,24 @@ ipcMain.on('setMenu', (event, arg) => {
 
 	const menu = Menu.buildFromTemplate(template)
 	Menu.setApplicationMenu(menu)
+})
+
+ipcMain.on('startFingerScanner', (event, arg) => {
+	ZKFPScan.connectDevice(win)
+})
+
+ipcMain.on('openFingerRegister', (event, arg) => {
+	ZKFPScan.openFingerRegister(arg)
+})
+
+ipcMain.on('closeFingerRegister', () => {
+	ZKFPScan.closeFingerRegister()
+})
+
+ipcMain.on('addFingerTemplate', (event, arg) => {
+	event.returnValue = ZKFPScan.addFingerTemplate(arg)
+})
+
+ipcMain.on('initEmployeeFingerPrint', (event, arg) => {
+	ZKFPScan.initEmployeeFingerPrint(arg)
 })

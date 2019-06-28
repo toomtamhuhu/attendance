@@ -25,6 +25,8 @@
 </template>
 
 <script>
+import { ipcRenderer } from 'electron'
+
 export default {
   layout: 'login',
   data () {
@@ -39,6 +41,11 @@ export default {
       },
     }
   },
+
+  mounted () {
+    ipcRenderer.send('startFingerScanner')
+  },
+
   methods: {
     login: _.debounce(async function () {
       this.loading = true

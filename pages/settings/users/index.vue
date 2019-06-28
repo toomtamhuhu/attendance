@@ -10,8 +10,6 @@
 </template>
 
 <script>
-import gql from 'graphql-tag'
-
 export default {
   middleware: [({route, redirect}) => {
     if (route.fullPath === '/settings/users') redirect('/settings/users/users')

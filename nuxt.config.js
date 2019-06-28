@@ -35,8 +35,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/vuetify',
-    '@nuxtjs/apollo'
+    '@nuxtjs/vuetify'
   ],
   plugins: [
     { src: '~/plugins/index' },
@@ -56,7 +55,7 @@ module.exports = {
           },
           logout: false,
           user: {
-            url: '/api/user',
+            url: 'v2/api/user',
             propertyName: false
           }
         }
@@ -67,13 +66,6 @@ module.exports = {
     baseURL: process.env.baseUrl || 'http://localhost',
     headers: {
       'X-Requested-With': 'XMLHttpRequest'
-    }
-  },
-  apollo: {
-    clientConfigs: {
-      default: {
-        httpEndpoint:process.env.graphqlUrl || 'http://localhost:8000/graphql'
-      }
     }
   }
 }

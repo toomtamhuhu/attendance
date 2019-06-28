@@ -27,7 +27,9 @@
         <template v-slot:items="props">
           <template v-for="(f, i) in tableData.headers">
             <template>
-              <slot v-if="f.slot" :name="f.value" :data="props.item" />
+              <td :key="i" v-if="f.slot">
+                <slot v-if="f.slot" :name="f.value" :data="props.item" />
+              </td>
               <td :key="i" v-else>{{ getObjectData(props.item, f) }}</td>
             </template>
           </template>
@@ -71,7 +73,14 @@ export default {
 
   methods: {
     getObjectData (data, field) {
-      return data[field.value]
+      let v = data[field.value]
+      if (typeof data[field.value] === 'undefined') {
+        const s = field.value.substring(0, field.value.indexOf('.'))
+        field.value.split('.').forEach(key => {
+          if (typeof data[s][key] !== 'undefined') v = data[s][key]
+        })
+      }
+      return v
     }
   }
 }

@@ -13,15 +13,16 @@
   },
   "scripts": {
     "dev": "cross-env NODE_ENV=DEV electron .",
-    "build": "nuxt build && electron-builder"
+    "build": "nuxt build && electron-builder",
+    "rebuild": "electron-rebuild"
   },
   "dependencies": {
-    "@nuxtjs/apollo": "^4.0.0-rc6",
     "@nuxtjs/auth": "^4.6.0",
     "@nuxtjs/axios": "^5.5.3",
     "@nuxtjs/vuetify": "^0.5.5",
     "bufferutil": "^4.0.1",
     "dotenv": "^8.0.0",
+    "electron-rebuild": "^1.8.5",
     "moment": "^2.24.0",
     "node-fetch": "^2.6.0",
     "node-sass": "^4.12.0",
@@ -34,7 +35,7 @@
   "devDependencies": {
     "babel-eslint": "^8.2.1",
     "cross-env": "^5.1.4",
-    "electron": "2.0.0-beta.7",
+    "electron": "^2.0.18",
     "electron-builder": "^20.8.1",
     "electron-devtools-installer": "^2.2.3",
     "eslint": "^4.15.0",

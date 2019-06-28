@@ -1,6 +1,10 @@
 <template>
   <div>
-    WORK
+    <v-tabs>
+      <v-tab to="/settings/work-rules">กะงาน</v-tab>
+    </v-tabs>
+    <br>
+    <nuxt-child />
   </div>
 </template>
 
