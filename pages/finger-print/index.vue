@@ -6,11 +6,20 @@
     <br>
     <v-page>
       <div slot="content">
+        <v-divider class="my-3"/>
         <v-table :table="tableData">
           <template slot="finger_print" slot-scope="{ data }">
-            <v-tooltip bottom>
+            <v-tooltip v-if="data.finger_print" bottom>
               <template v-slot:activator="{ on }">
-                <v-btn flat icon :color="data.finger_print ? 'success' : 'error'" v-on="on" @click="show(data)">
+                <v-btn style="cursor: default" flat icon color="success" v-on="on">
+                  <v-icon>check</v-icon>
+                </v-btn>
+              </template>
+              <span>สแกนนิ้ว</span>
+            </v-tooltip>
+            <v-tooltip v-else bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn flat icon color="error" v-on="on" @click="show(data)">
                   <v-icon>close</v-icon>
                 </v-btn>
               </template>

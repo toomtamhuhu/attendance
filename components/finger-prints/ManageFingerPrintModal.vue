@@ -30,8 +30,8 @@
           <v-progress-linear color="success" :value="countEnroll()" />
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn color="green darken-1" flat @click="closeDialog">Disagree</v-btn>
-            <v-btn color="green darken-1" flat @click="save">Agree</v-btn>
+            <v-btn outline  color="error" flat @click="closeDialog">ยกเลิก</v-btn>
+            <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>
           </v-card-actions>
         </v-container>
       </v-card>
