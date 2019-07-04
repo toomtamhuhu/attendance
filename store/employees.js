@@ -34,7 +34,7 @@ export default {
           url: "http://vue-hrm.huhu/graphql",
           data: {
             query: `{
-            employees(work_status: true) {
+            employees(work_status: true, branch_id: [16, 17]) {
                 id
                 name
                 nickname
@@ -47,11 +47,7 @@ export default {
             }`
           }
         })
-        const employees = _.reduce(res.data.data.employees, (pre, cur) => {
-          if (cur.branch_id === 16 || cur.branch_id === 17) pre.push(cur)
-          return pre
-        }, [])
-        commit('data', _.orderBy(employees, ['branch_id']))
+        commit('data', _.orderBy(res.data.data.employees, ['branch_id']))
       } catch (e) {
         throw e
       }

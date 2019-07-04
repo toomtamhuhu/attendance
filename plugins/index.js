@@ -98,6 +98,13 @@ Vue.mixin({
         return errors
       }
       return e.response.data.message
+    },
+
+    userCan (permission) {
+      if (typeof this.$auth.user.roles[0] === 'undefined') return false
+      const allow = _.find(this.$auth.user.roles[0].permissions, { 'name': permission })
+      if (typeof allow === 'undefined') return false
+      return true
     }
   }
 })

@@ -1,7 +1,10 @@
 <template>
   <v-select
-      :items="items"
-      label="Standard"
+      v-model="selectedBranch"
+      :items="branches"
+      item-text="name"
+      :return-object="true"
+      :disabled="disabled"
   />
 </template>
 
@@ -31,7 +34,8 @@ export default {
   },
 
   data: () => ({
-    selectedBranch: null
+    selectedBranch: null,
+    loading: true
   }),
 
   watch: {
@@ -53,7 +57,8 @@ export default {
       } else if (this.value && typeof this.value !== 'undefined') {
         this.selectedBranch = _.find(this.branches, {'id': this.value.id})
       } else {
-        this.selectedBranch = _.find(this.branches, {'id': this.$store.getters['Branches/branch'](this.$auth.user.branch_id).main_branch_id})
+        // console.log(this.branches, this.$store.getters['Branches/branch'](this.$auth.user.branch_id))
+        this.selectedBranch = this.userCan('branch_selectable') ? this.branches[0] : _.find(this.branches, {'id': this.$store.getters['Branches/branch'](this.$auth.user.branch_id)})
       }
     })
   }
