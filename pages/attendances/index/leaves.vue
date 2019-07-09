@@ -29,9 +29,8 @@
         </v-flex>
         <v-flex />
       </v-layout>
-      <v-layout>
-        <LeaveTable v-if="!loading" :data="employees" :month="filter.month" />
-      </v-layout>
+      <LeaveTable v-if="!loading" :data="employees" :month="filter.month" @onCellClick="handleLeaveTableClick" />
+      <LeaveModal :data="selectedDate" @closed="closedLeaveModal" />
     </div>
   </v-page>
 </template>
@@ -40,11 +39,13 @@
 import axios from 'axios'
 import BranchSelector from '@/components/layouts/BranchSelector'
 import LeaveTable from '@/components/attendances/LeaveTable'
+import LeaveModal from '@/components/attendances/LeaveModal'
 
 export default {
   components: {
     BranchSelector,
-    LeaveTable
+    LeaveTable,
+    LeaveModal
   },
 
   data () {
@@ -57,7 +58,12 @@ export default {
         month: new Date().toISOString().substr(0, 7)
       },
       loading: false,
-      selectedDate: null
+      selectedDate: {
+        open: false,
+        branch_id: null,
+        day: null,
+        employee: null
+      }
     }
   },
 
@@ -83,6 +89,7 @@ export default {
                 id
                 nickname
                 name
+                gender
                 leaves {
                   id
                   employee_id
@@ -101,6 +108,23 @@ export default {
         this.errorAlert(e)
       }
       this.loading = false
+    },
+    handleLeaveTableClick (data) {
+      this.selectedDate = {
+        open: true,
+        branch_id: this.filter.branch.id,
+        day: data[0],
+        employee: data[1]
+      }
+    },
+    closedLeaveModal (state) {
+      this.selectedDate = {
+        open: false,
+        branch_id: null,
+        day: null,
+        employee: null
+      }
+      if (state) this.fetchData()
     }
   }
 }

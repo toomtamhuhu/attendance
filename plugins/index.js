@@ -3,7 +3,7 @@ import moment from 'moment'
 import numeral from 'numeral'
 
 Vue.filter('moment', (date, format) => {
-  return format ? moment(date).format(format) : moment(date).format('YYYY-MM-DD')
+  return format ? moment(date).locale('th').format(format) : moment(date).locale('th').format('YYYY-MM-DD')
 })
 
 Vue.filter('numeral', (value, format, hideZero) => {

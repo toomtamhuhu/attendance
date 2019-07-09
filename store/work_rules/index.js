@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
+import moment from 'moment'
 
 export default {
   namespaced: true,
@@ -47,6 +48,10 @@ export default {
               }
             }`
           }
+        })
+        _.map(res.data.data.work_rules, item => {
+          item.full_name = `${item.name} ` + moment(`0000-01-01 ${item.work_start}`).format('HH:mm') + '-' + moment(`0000-01-01 ${item.work_end}`).format('HH:mm')
+          return item
         })
         commit('data', _.orderBy(res.data.data.work_rules, ['name']))
       } catch (e) {
