@@ -2,6 +2,13 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent width="750">
       <v-card v-if="data.employee">
+        <v-layout justify-end>
+          <v-flex xs12 sm1>
+            <v-btn flat icon color="red" @click="closeDialog(false)">
+              <v-icon>close</v-icon>
+            </v-btn>
+          </v-flex>
+        </v-layout>
         <v-card-title class="headline">{{ data.day | moment('D MMMM YYYY') }} - ({{ data.employee.name }} {{ data.employee.nickname }})</v-card-title>
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
@@ -21,8 +28,8 @@
                   />
                 </v-flex>
                 <v-spacer></v-spacer>
-                <v-flex xs4 v-if="checkSelectedAttendance()">
-                  <WorkRuleSelector @input="data => selectedWorkRule = data"/>
+                <v-flex xs4 v-if="form.type.value === -1">
+                  <WorkRuleSelector :value="form.work_rule_id" @input="data => selectedWorkRule = data"/>
                 </v-flex>
                 <v-flex/>
               </v-layout>
@@ -44,7 +51,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn outline  color="error" flat @click="closeDialog(false)">ยกเลิก</v-btn>
+            <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id">ลบ</v-btn>
             <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>
           </v-card-actions>
         </v-container>
@@ -104,6 +111,8 @@ export default {
           description: null,
           work_rule_id: null
         } : leave
+        if(typeof this.form.type === 'number') this.form.type = _.find(this.types, {'value': this.form.type})
+        if(typeof this.form.certificate === 'number') this.form.certificate = _.find(this.certificates, {'value': this.form.certificate === 1 ? true : false})
       } else {
         const index = _.findIndex(this.types, { 'value': 3 } )
         if (index > -1) this.types.splice(index, 1)
@@ -136,14 +145,15 @@ export default {
     async save() {
       if (!this.checkMonth()) return
       this.loading = true
-      this.form.work_rule_id = this.form.type.value === -1 ? this.selectedWorkRule.id : null
-      this.form.type = this.form.type.value
-      this.form.certificate = this.form.certificate.value
-      const res = await axios({
-        method: 'POST',
-        url: 'http://vue-hrm.huhu/graphql',
-        data: {
-          query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int!, $leave_date: String!, $description: String, $certificate: Int!) {
+      try {
+        this.form.work_rule_id = this.form.type.value === -1 ? this.selectedWorkRule.id : null
+        this.form.type = this.form.type.value
+        this.form.certificate = this.form.certificate.value
+        const res = await axios({
+          method: 'POST',
+          url: 'http://vue-hrm.huhu/graphql',
+          data: {
+            query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!) {
               createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate) {
                   employee_id
                   type
@@ -153,50 +163,48 @@ export default {
                   certificate
                 }
               }`,
-          variables: {
-            employee_id: this.form.employee_id,
-            type: this.form.type,
-            work_rule_id: this.form.work_rule_id,
-            leave_date: this.form.leave_date,
-            description: this.form.description,
-            certificate: this.form.certificate
+            variables: {
+              employee_id: this.form.employee_id,
+              type: this.form.type,
+              work_rule_id: this.form.work_rule_id,
+              leave_date: this.form.leave_date,
+              description: this.form.description,
+              certificate: this.form.certificate
+            }
           }
-        }
-      })
-      console.log(res.data)
-      // if(res.status === 200) this.addItem(res.data.data.createWorkRule)
-      // try {
-      //   const res = await this.$axios.$post('/api/employees/hr/leaves', {
-      //     ...this.form,
-      //     branch_code: this.data.branch_code
-      //   })
-      //   res.status = res.saved
-      //   this.noticeAlert(res)
-      //   if (res.saved) {
-      //     this.form = {
-      //       employee_id: null,
-      //       leave_date: this.form.leave_date,
-      //       certificate: 0,
-      //       type: 1,
-      //       description: null
-      //     }
-      //     this.close(true)
-      //   }
-      // } catch (e) {
-      //   this.errorAlert(e)
-      // }
-      this.loading = false
+        })
+        this.$emit('closed', res.status === 200 ? true : false)
+      } catch (e) {
+        this.errorAlert(e)
+      } finally {
+        this.loading = false
+      }
     },
-    async deleteLeave(leaveId) {
+    async deleteLeave() {
       if (!this.checkMonth()) return
+      if (!confirm('ลบ?')) return
       this.loading = true
       try {
-        const res = await this.$axios.$delete(`/api/employees/hr/leaves/${leaveId}`)
-        res.status = res.saved
-        this.noticeAlert(res)
-        if (res.saved) {
-          this.close(true)
-        }
+        const res = await axios({
+          method: 'POST',
+          url: 'http://vue-hrm.huhu/graphql',
+          data: {
+            query: `mutation ($id: Int!) {
+              deleteLeave(id: $id) {
+                  employee_id
+                  type
+                  work_rule_id
+                  leave_date
+                  description
+                  certificate
+                }
+              }`,
+            variables: {
+              id: this.form.id
+            }
+          }
+        })
+        this.$emit('closed', res.status === 200 ? true : false)
       } catch (e) {
         this.errorAlert(e)
       }
@@ -210,13 +218,6 @@ export default {
         return false
       }
       return true
-    },
-    checkSelectedAttendance () {
-      if (this.form.type) {
-        return this.form.type.value === -1 ? true : false
-      } else {
-        return false
-      }
     }
   }
 }

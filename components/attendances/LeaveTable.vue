@@ -20,12 +20,10 @@
         >
           <div
               v-if="item"
-              :style="{backgroundColor: item.type === 1 ? '#36f' : item.type === 2 ? '#f63' : '#852' }"
+              :style="{ backgroundColor: changeTypeToObj(item, true), textAlign: 'center' }"
               class="leaveBlock"
           >
-            <span v-if="item.type === 0">หยุด</span>
-            <span v-else-if="item.type === 1">ลากิจ</span>
-            <span v-else-if="item.type === 2">ป่วย</span>
+            <span v-if="item">{{ changeTypeToObj(item) }}</span>
           </div>
         </td>
       </tr>
@@ -35,56 +33,81 @@
 </template>
 
 <script>
-  export default {
-    props: {
-      data: {
-        type: Array,
-        default () {
-          return []
-        }
-      },
-      month: {
-        type: [Object, String],
-        default () {
-          return this.$moment().format('YYYY-MM-DD')
-        }
+import { mapGetters } from 'vuex'
+
+export default {
+  props: {
+    data: {
+      type: Array,
+      default() {
+        return []
       }
     },
-
-    computed: {
-      days () {
-        let startOf = this.$moment(this.month).startOf('month').format('YYYY-MM-DD')
-        const endOf = this.$moment(this.month).endOf('month').format('YYYY-MM-DD')
-        let days = []
-        while (startOf <= endOf) {
-          days.push(startOf)
-          startOf = this.$moment(startOf).add(1, 'days').format('YYYY-MM-DD')
-        }
-        return days
-      },
-      tableItems () {
-        let employees = _.map(this.data, item => {
-          let leaves = []
-
-          for (let day in this.days) {
-            const leave = _.find(item.leaves, { 'leave_date': this.days[day] })
-            leaves.push(leave)
-          }
-
-          item.leaves = leaves
-          return item
-        })
-
-        return employees
+    month: {
+      type: [Object, String],
+      default() {
+        return this.$moment().format('YYYY-MM-DD')
       }
-    },
+    }
+  },
 
-    methods: {
-      dateStyle (date) {
-        return { 'color': this.$moment(date).locale('th').format('dddd') === 'อาทิตย์' ? 'red' : null }
+  data () {
+    return {
+      types: [{ value: -1, name: 'กะงาน'}, { value: 0, name: 'หยุด'}, { value: 1, name: 'ลากิจ'}, { value: 2, name: 'ลาป่วย'}],
+    }
+  },
+
+  computed: {
+    days() {
+      let startOf = this.$moment(this.month).startOf('month').format('YYYY-MM-DD')
+      const endOf = this.$moment(this.month).endOf('month').format('YYYY-MM-DD')
+      let days = []
+      while (startOf <= endOf) {
+        days.push(startOf)
+        startOf = this.$moment(startOf).add(1, 'days').format('YYYY-MM-DD')
+      }
+      return days
+    },
+    tableItems() {
+      let employees = _.map(this.data, item => {
+        let leaves = []
+
+        for (let day in this.days) {
+          const leave = _.find(item.leaves, {'leave_date': this.days[day]})
+          leaves.push(leave)
+        }
+
+        item.leaves = leaves
+        return item
+      })
+
+      return employees
+    },
+    ...mapGetters({
+      work_rules: 'WorkRules/data'
+    })
+  },
+
+  methods: {
+    dateStyle(date) {
+      return {'color': this.$moment(date).locale('th').format('dddd') === 'อาทิตย์' ? 'red' : null}
+    },
+    changeTypeToObj(data, style) {
+      if(typeof data.type === 'number') data.type = _.find(this.types, {'value': data.type})
+      let work_rule = _.find(this.work_rules, {'id': data.work_rule_id})
+
+      if (style) {
+        return data.type.value === -1 ? '#7f7dff' : data.type.value === 1 ? '#36f' : data.type.value === 2 ? '#f63' : '#852'
+      } else {
+        return data.type.value === -1
+          ? typeof work_rule !== 'undefined'
+            ? work_rule.short_name
+            : data.type.name
+          : data.type.name
       }
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>

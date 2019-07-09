@@ -5,7 +5,7 @@
         <v-flex xs4>
           <BranchSelector :disabled="!userCan('branch_selectable')" @input="data => filter.branch = data" />
         </v-flex>
-        <v-spacer></v-spacer>
+        <v-spacer />
         <v-flex xs4>
           <v-dialog
               ref="dialog"
@@ -18,11 +18,11 @@
             <template v-slot:activator="{ on }">
               <v-text-field
                   v-model="filter.month"
-                  label="วันที่"
+                  label="เดือน"
                   prepend-icon="event"
                   readonly
                   v-on="on"
-              ></v-text-field>
+              />
             </template>
             <v-date-picker v-model="filter.month" locale="th" type="month" @input="$refs.dialog.save(filter.month)" scrollable />
           </v-dialog>
@@ -93,7 +93,11 @@ export default {
                 leaves {
                   id
                   employee_id
+                  type
+                  work_rule_id
                   leave_date
+                  description
+                  certificate
                 }
               }
             }`,

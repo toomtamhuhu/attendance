@@ -146,7 +146,7 @@ export default {
             method: 'POST',
             url: 'http://vue-hrm.huhu/graphql',
             data: {
-              query: `mutation ($id: ID!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String) {
+              query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String) {
               updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note) {
                   id
                   name
