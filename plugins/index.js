@@ -105,6 +105,11 @@ Vue.mixin({
       const allow = _.find(this.$auth.user.roles[0].permissions, { 'name': permission })
       if (typeof allow === 'undefined') return false
       return true
+    },
+
+    hasRole (role) {
+      if (typeof this.$auth.user.roles[0] === 'undefined') return false
+      return this.$auth.user.roles[0].name === role ? true : false
     }
   }
 })

@@ -130,7 +130,7 @@ function DoRegister (template) {
 function DoIdentify (template) {
   var ret = zkfp.zkfpm_db_identify(template, 2048);
   fingerPrintToRender({
-    employee_id: Number(ret.id.toString().substr(1)),
+    employee_id: Number(ret.id.toString()),
     process: 'identify',
     status: true,
     notice: 'Identify succ!'
@@ -198,7 +198,7 @@ function initEmployeeFingerPrint (employees) {
   employees.forEach((v, k) => {
     if (v.finger_print) {
       let buff = new Buffer(v.finger_print, 'base64');
-      zkfp.zkfpm_db_add(Number(`1${v.id}`), buff, 2048)
+      zkfp.zkfpm_db_add(Number(`${v.id}`), buff, 2048)
     }
     if (v.finger_print2) {
       let buff = new Buffer(v.finger_print2, 'base64');

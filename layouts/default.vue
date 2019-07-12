@@ -20,6 +20,12 @@ import { ipcRenderer } from 'electron'
 export default {
   middleware: ['auth', 'prepareData'],
 
+	head () {
+		return {
+			title: `โปรแกรมลงเวลา - ผู้ใช่: ${this.$auth.user.name}`
+		}
+	},
+
   watch: {
   	'$route'(data) {
 	  	console.log(data)
@@ -37,10 +43,10 @@ export default {
 		ipcRenderer.send('setMenu', [
 			{label: 'Home', link: '/'},
 			{label: 'ลงเวลา', link: '/attendances'},
-			{label: 'เพิ่มนิ้ว พนง.', link: '/finger-print'},
+			{label: 'เพิ่มนิ้ว พนง.', link: '/finger-print', permission: this.hasRole('HR') || this.hasRole('ADMIN')},
 			{
 				label: 'ตั้งค่า',
-				permission: this.can('settings'),
+				permission: this.hasRole('ADMIN'),
 				submenu: [
 					// { label: 'ผู้ใช้', link: '/settings/users' },
 					{ label: 'กะการทำงาน', link: '/settings/work-rules' }

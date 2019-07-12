@@ -130,7 +130,7 @@ export default {
           method: 'POST',
           url: 'http://vue-hrm.huhu/graphql',
           data: {
-            query: `mutation ($id: ID!, $finger_print: String!) {
+            query: `mutation ($id: Int!, $finger_print: String!) {
               updateEmployeeFingerPrint(id: $id, finger_print: $finger_print) {
                   id
                   name
@@ -149,7 +149,7 @@ export default {
           }
         })
         ipcRenderer.sendSync('addFingerTemplate', {
-          id: this.data.id,
+          id: res.data.data.updateEmployeeFingerPrint.id,
           finger: this.form.number,
           template: this.form.finger_print
         })

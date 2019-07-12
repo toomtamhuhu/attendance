@@ -35,7 +35,6 @@
 
 <script>
 import { mapGetters, mapMutations } from 'vuex'
-import axios from "axios"
 import ManageFingerPrintModal from '@/components/finger-prints/ManageFingerPrintModal'
 
 export default {
