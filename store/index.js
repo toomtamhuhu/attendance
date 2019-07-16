@@ -1,4 +1,5 @@
 import Vuex from 'vuex'
+import axios from 'axios'
 
 import Branches from './branches'
 import Permissions from './permissions'
@@ -8,7 +9,28 @@ import Employees from './employees'
 
 const createStore = () => {
   return new Vuex.Store({
-    actions: {},
+    state: {
+      serverTime: null
+    },
+
+    mutations: {
+      serverTime (state, payload) {
+        state.serverTime = payload
+      }
+    },
+
+    actions: {
+      async serverTime ({ commit, state }, payload) {
+        try {
+          const res = await axios({method: "GET", url: "https://ts.tssys.tk/api/server_time"})
+          // const res = await this.$axios.$get('/v2/api/server-time')
+          console.log(res.data)
+          commit('serverTime', res.data)
+        } catch (e) {
+          throw e
+        }
+      }
+    },
 
     modules: {
       Branches,

@@ -30,7 +30,7 @@
               <td :key="i" v-if="f.slot">
                 <slot v-if="f.slot" :name="f.value" :data="props.item" />
               </td>
-              <td :key="i" v-else>{{ f.formatter ? f.formatter(props.item) : getObjectData(props.item, f) }}</td>
+              <td :key="i" v-else>{{ f.callback ? f.callback(props.item) : getObjectData(props.item, f) }}</td>
             </template>
           </template>
         </template>

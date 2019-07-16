@@ -98,6 +98,7 @@ export default {
                   leave_date
                   description
                   certificate
+                  work_in_state
                 }
               }
             }`,

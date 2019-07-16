@@ -49,7 +49,7 @@
               </v-flex>
             </v-form>
           </v-card-text>
-          <v-card-actions>
+          <v-card-actions v-if="form.work_in_state !== 1">
             <v-spacer></v-spacer>
             <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id">ลบ</v-btn>
             <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>
@@ -149,12 +149,14 @@ export default {
         this.form.work_rule_id = this.form.type.value === -1 ? this.selectedWorkRule.id : null
         this.form.type = this.form.type.value
         this.form.certificate = this.form.certificate.value
-        const res = await axios({
-          method: 'POST',
-          url: 'http://vue-hrm.huhu/graphql',
-          data: {
-            query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!) {
-              createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate) {
+        if (this.form.id) {
+          const res = await axios({
+            method: 'POST',
+            url: 'http://vue-hrm.huhu/graphql',
+            data: {
+              query: `mutation ($id: Int!, $employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
+              updateLeave(id: $id, employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
+                  id
                   employee_id
                   type
                   work_rule_id
@@ -163,17 +165,47 @@ export default {
                   certificate
                 }
               }`,
-            variables: {
-              employee_id: this.form.employee_id,
-              type: this.form.type,
-              work_rule_id: this.form.work_rule_id,
-              leave_date: this.form.leave_date,
-              description: this.form.description,
-              certificate: this.form.certificate
+              variables: {
+                id: this.form.id,
+                employee_id: this.form.employee_id,
+                type: this.form.type,
+                work_rule_id: this.form.work_rule_id,
+                leave_date: this.form.leave_date,
+                description: this.form.description,
+                certificate: this.form.certificate
+              }
             }
-          }
-        })
-        this.$emit('closed', res.status === 200 ? true : false)
+          })
+          this.$emit('closed', res.status === 200 ? true : false)
+        } else {
+          const res = await axios({
+            method: 'POST',
+            url: 'http://vue-hrm.huhu/graphql',
+            data: {
+              query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
+              createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
+                  employee_id
+                  type
+                  work_rule_id
+                  leave_date
+                  description
+                  certificate
+                  work_in_state
+                }
+              }`,
+              variables: {
+                employee_id: this.form.employee_id,
+                type: this.form.type,
+                work_rule_id: this.form.work_rule_id,
+                leave_date: this.form.leave_date,
+                description: this.form.description,
+                certificate: this.form.certificate,
+                work_in_state: 0
+              }
+            }
+          })
+          this.$emit('closed', res.status === 200 ? true : false)
+        }
       } catch (e) {
         this.errorAlert(e)
       } finally {

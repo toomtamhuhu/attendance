@@ -18,7 +18,7 @@ import { mapGetters } from 'vuex'
 import { ipcRenderer } from 'electron'
 
 export default {
-  middleware: ['auth', 'prepareData'],
+  middleware: ['auth', 'prepareData', 'serverTime'],
 
 	head () {
 		return {

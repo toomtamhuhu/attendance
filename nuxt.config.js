@@ -39,7 +39,8 @@ module.exports = {
   ],
   plugins: [
     { src: '~/plugins/index' },
-    { src: '~/plugins/components', ssr: false }
+    { src: '~/plugins/components', ssr: false },
+    { src: '~/plugins/moment' }
   ],
   auth: {
     redirect: {
