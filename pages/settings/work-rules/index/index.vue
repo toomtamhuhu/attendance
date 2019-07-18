@@ -47,6 +47,10 @@
                 label="หมายเหตุ"
             />
 
+            <div>
+              <swatches v-model="form.color" />
+            </div>
+
           </v-form>
         </v-card-text>
       </template>
@@ -81,8 +85,11 @@
 <script>
 import { mapGetters, mapMutations } from 'vuex'
 import axios from 'axios'
+import swatches from 'vue-swatches'
+import 'vue-swatches/dist/vue-swatches.min.css'
 
 export default {
+  components: { swatches },
   data() {
     return {
       open: false,
@@ -92,7 +99,8 @@ export default {
         work_start: '00:00',
         work_end: '12:00',
         ot: 0,
-        note: null
+        note: null,
+        color: '#1CA085'
       }
     }
   },
@@ -146,8 +154,8 @@ export default {
             method: 'POST',
             url: 'http://vue-hrm.huhu/graphql',
             data: {
-              query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String) {
-              updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note) {
+              query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!) {
+              updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color) {
                   id
                   name
                   short_name
@@ -155,6 +163,7 @@ export default {
                   work_end
                   ot
                   note
+                  color
                 }
               }`,
               variables: {
@@ -164,7 +173,8 @@ export default {
                 work_start: this.form.work_start,
                 work_end: this.form.work_end,
                 ot: this.form.ot,
-                note: this.form.note
+                note: this.form.note,
+                color: this.form.color
               }
             }
           })
@@ -174,8 +184,8 @@ export default {
             method: 'POST',
             url: 'http://vue-hrm.huhu/graphql',
             data: {
-              query: `mutation ($name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String) {
-              createWorkRule(name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note) {
+              query: `mutation ($name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!) {
+              createWorkRule(name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color) {
                   id
                   name
                   short_name
@@ -183,6 +193,7 @@ export default {
                   work_end
                   ot
                   note
+                  color
                 }
               }`,
               variables: {
@@ -191,7 +202,8 @@ export default {
                 work_start: this.form.work_start,
                 work_end: this.form.work_end,
                 ot: this.form.ot,
-                note: this.form.note
+                note: this.form.note,
+                color: this.form.color
               }
             }
           })
@@ -211,7 +223,8 @@ export default {
         work_start: null,
         work_end: null,
         ot: null,
-        note: null
+        note: null,
+        color: '#1CA085'
       }
     },
     ...mapMutations({

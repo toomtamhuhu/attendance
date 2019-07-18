@@ -19,9 +19,12 @@
       <v-divider class="my-3"/>
       <v-table :table="tableData">
         <template slot="work_rule" slot-scope="{ data }">
-          <v-chip label>{{ data.work_rule.short_name }}</v-chip>
+          <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
-        <span slot="work_start" slot-scope="{ data }">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} - {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
+        <span slot="time" slot-scope="{ data }">{{ data.updated_at | moment('HH:mm') }}</span>
+        <span slot="in_out" slot-scope="{ data }">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
+        <v-chip slot="late" slot-scope="{ data }" label :color="data.late === 0 ? 'success' : 'warning'" v-if="data.late !== null">{{ data.late | numeral }}</v-chip>
+        <v-chip slot="wage" slot-scope="{ data }" label :color="data.wage === 0 ? 'error' : 'info'" v-if="data.late !== null">{{ data.wage | numeral }}</v-chip>
       </v-table>
     </div>
   </v-page>
@@ -58,11 +61,12 @@ export default {
       const table = {
         headers: [
           {text: 'ชื่อ', value: 'employee.name'},
-          {text: 'วันที่', value: 'leave_date', callback: data => this.$moment(data.updated_at).locale('th').format('DD/MM/YY HH:mm') },
+          {text: 'วันที่', value: 'leave_date', callback: data => this.$moment(data.leave_date).locale('th').format('DD/MM/YY') },
           {text: 'กะ', value: 'work_rule', slot: true},
-          {text: 'เวลา เข้า-ออก งาน', value: 'work_start', slot: true},
-          {text: 'สาย (นาที)', value: 'late', callback: data => this.$numeral(data.late).format('0,0') },
-          {text: 'เบี้ยเลี้ยง', value: 'wage', callback: data => this.$numeral(data.wage).format('0,0') }
+          {text: 'เข้า/ออก', value: 'in_out', slot: true},
+          {text: 'ลงเวลา', value: 'time', slot: true},
+          {text: 'สาย (นาที)', value: 'late', slot: true},
+          {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}
         ],
         desserts: this.leaves
       }
@@ -98,7 +102,6 @@ export default {
             workRule: true
           }
         })
-        console.log(res)
         this.leaves = _.reduce(res, (pre, cur) => {
           let start = this.$moment(cur.updated_at)
           let end = this.$moment(_.last(res).updated_at)

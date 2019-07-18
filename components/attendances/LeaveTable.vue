@@ -97,7 +97,7 @@ export default {
       let work_rule = _.find(this.work_rules, {'id': data.work_rule_id})
 
       if (style) {
-        return data.type.value === -1 ? '#7f7dff' : data.type.value === 1 ? '#36f' : data.type.value === 2 ? '#f63' : '#852'
+        return data.type.value === -1 ? work_rule.color : data.type.value === 1 ? '#36f' : data.type.value === 2 ? '#f63' : '#852'
       } else {
         return data.type.value === -1
           ? typeof work_rule !== 'undefined'

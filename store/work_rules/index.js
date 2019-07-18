@@ -45,6 +45,7 @@ export default {
                 work_end
                 ot
                 note
+                color
               }
             }`
           }
