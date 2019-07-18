@@ -38,7 +38,8 @@ export default {
                 id
                 name
                 nickname
-                finger_print
+                finger_print1
+                finger_print2
                 branch_id
                 branch {
                   name

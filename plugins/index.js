@@ -52,7 +52,7 @@ Vue.mixin({
     noticeAlert(inputs) {
       this.$notify({
         group: 'notify',
-        type: inputs.status ? 'is-success' : 'is-danger',
+        type: inputs.status ? 'success' : 'error',
         title: inputs.notice
       })
     },
@@ -61,13 +61,13 @@ Vue.mixin({
         if (error.response.status === 413) {
           this.$notify({
             group: 'notify',
-            type: 'is-danger',
+            type: 'error',
             title: 'ทรัพยากรที่ร้องขอใหญ่เกินกว่าที่จะส่งด้วยโพรโทคอลปัจจุบันได้'
           })
         } else {
           this.$notify({
             group: 'notify',
-            type: 'is-danger',
+            type: 'error',
             title: this.errorMsg(error)
           })
         }
@@ -77,13 +77,13 @@ Vue.mixin({
       } else if (error.message) {
         this.$notify({
           group: 'notify',
-          type: 'is-danger',
+          type: 'error',
           title: error.message
         })
       } else {
         this.$notify({
           group: 'notify',
-          type: 'is-danger',
+          type: 'error',
           title: error
         })
       }

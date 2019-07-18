@@ -5,7 +5,6 @@
         :width="320"
         group="notify"
         position="top center"
-        classes="notification"
     />
   </div>
 </template>

@@ -2,7 +2,7 @@
   <v-layout row justify-center>
     <v-dialog v-model="dialog" persistent width="750">
       <v-card>
-        <v-card-title class="headline">บันทึกลายนิ้วมือของ {{ data ? data.nickname : '' }}</v-card-title>
+        <v-card-title class="headline">บันทึกลายนิ้วมือของ {{ data ? data.nickname : '' }} (นิ้วที่ {{ number }})</v-card-title>
         <v-container grid-list-md text-xs-center>
           <v-layout row wrap>
             <v-flex xs6>
@@ -52,6 +52,10 @@ export default {
     data: {
       type: Object,
       default: null
+    },
+    number: {
+      type: Number,
+      default: 1
     }
   },
 
@@ -61,8 +65,8 @@ export default {
       submitting: false,
       enroll_idx: 3,
       form: {
-        number: 1,
-        finger_print: null
+        finger_print1: null,
+        finger_print2: null
       }
     }
   },
@@ -72,7 +76,7 @@ export default {
       if (data) {
         ipcRenderer.send('openFingerRegister', {
           ...this.data,
-          finger: this.form.number
+          finger: this.number
         })
 
         ipcRenderer.on('getFingerPrintDetail', (event, arg) => {
@@ -85,7 +89,8 @@ export default {
             }
             if (arg.enroll_idx === 0) {
               this.noticeAlert(arg)
-              this.form.finger_print = arg.base64
+              this.form.finger_print1 = this.number === 1 ? this.data.finger_print1 !== null ? this.data.finger_print1 : arg.base64 : this.data.finger_print1
+              this.form.finger_print2 = this.number === 2 ? this.data.finger_print2 !== null ? this.data.finger_print2 : arg.base64 : this.data.finger_print2
               this.save()
             }
           }
@@ -113,14 +118,16 @@ export default {
       return (3 - this.enroll_idx) * 33.33
     },
     resetForm () {
+      this.dialog = false
       this.enroll_idx = 3
       this.form = {
         number: 1,
-        finger_print: null
+        finger_print1: null,
+        finger_print2: null
       }
     },
     async closeDialog () {
-      this.dialog = false
+      this.resetForm()
       this.$emit('closed')
     },
     async save () {
@@ -130,12 +137,13 @@ export default {
           method: 'POST',
           url: 'http://vue-hrm.huhu/graphql',
           data: {
-            query: `mutation ($id: Int!, $finger_print: String!) {
-              updateEmployeeFingerPrint(id: $id, finger_print: $finger_print) {
+            query: `mutation ($id: Int!, $finger_print1: String, $finger_print2: String) {
+              updateEmployeeFingerPrint(id: $id, finger_print1: $finger_print1, finger_print2: $finger_print2) {
                   id
                   name
                   nickname
-                  finger_print
+                  finger_print1
+                  finger_print2
                   branch_id
                   branch {
                     name
@@ -144,22 +152,27 @@ export default {
               }`,
             variables: {
               id: this.data.id,
-              finger_print: this.form.finger_print
+              finger_print1: this.form.finger_print1,
+              finger_print2: this.form.finger_print2
             }
           }
         })
-        ipcRenderer.sendSync('addFingerTemplate', {
+        const finger_print = ipcRenderer.sendSync('addFingerTemplate', {
           id: res.data.data.updateEmployeeFingerPrint.id,
-          finger: this.form.number,
-          template: this.form.finger_print
+          finger: this.number,
+          template: this.number === 1 ? this.form.finger_print1 : this.form.finger_print2
         })
+        // if (finger_print.status === false) {
+        //   console.log(finger_print)
+        // }
+        this.noticeAlert(finger_print)
         if(res.status === 200) this.$emit('onSubmitted', res.data.data.updateEmployeeFingerPrint)
 
       } catch (e) {
         this.errorAlert(e)
       } finally {
-        this.dialog = false
         this.submitting = false
+        this.closeDialog()
       }
     }
   }

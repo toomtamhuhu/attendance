@@ -130,7 +130,8 @@ function DoRegister (template) {
 function DoIdentify (template) {
   var ret = zkfp.zkfpm_db_identify(template, 2048);
   fingerPrintToRender({
-    employee_id: Number(ret.id.toString()),
+    ret,
+    employee_id: ret.status === 0 ? Number(ret.id.toString().substr(1)) : null,
     process: 'identify',
     status: true,
     notice: 'Identify succ!'
@@ -139,7 +140,7 @@ function DoIdentify (template) {
 
 function openFingerRegister (data) {
   employee = data
-  employee.id = Number(`${employee.id}`)
+  employee.id = Number(`${employee.finger}${employee.id}`)
   m_register = true
   m_enrollIdx = 0
 }
@@ -151,7 +152,7 @@ function closeFingerRegister () {
 }
 
 function addFingerTemplate (data) {
-  let employeeId = Number(`${data.id}`)
+  let employeeId = Number(`${data.finger}${data.id}`)
   try {
     zkfp.zkfpm_db_del(employeeId);
   } catch (e) {
@@ -160,7 +161,6 @@ function addFingerTemplate (data) {
 
   try {
     console.log('zkfpm_db_add')
-    console.log(data.template)
     let buff = new Buffer(data.template, 'base64');
 
     let ret = zkfp.zkfpm_db_add(employeeId, buff, 2048)
@@ -196,9 +196,9 @@ function initEmployeeFingerPrint (employees) {
   if (zkfp === null) return
 
   employees.forEach((v, k) => {
-    if (v.finger_print) {
-      let buff = new Buffer(v.finger_print, 'base64');
-      zkfp.zkfpm_db_add(Number(`${v.id}`), buff, 2048)
+    if (v.finger_print1) {
+      let buff = new Buffer(v.finger_print1, 'base64');
+      zkfp.zkfpm_db_add(Number(`1${v.id}`), buff, 2048)
     }
     if (v.finger_print2) {
       let buff = new Buffer(v.finger_print2, 'base64');
