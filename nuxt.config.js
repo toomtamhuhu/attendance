@@ -35,12 +35,14 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/vuetify'
+    '@nuxtjs/vuetify',
+    '@nuxtjs/proxy'
   ],
   plugins: [
     { src: '~/plugins/index' },
     { src: '~/plugins/components', ssr: false },
-    { src: '~/plugins/moment' }
+    { src: '~/plugins/moment' },
+    { src: '~/plugins/print-report' }
   ],
   auth: {
     redirect: {
@@ -64,9 +66,17 @@ module.exports = {
     }
   },
   axios: {
+    // proxy: true,
     baseURL: process.env.baseUrl || 'http://localhost',
     headers: {
       'X-Requested-With': 'XMLHttpRequest'
     }
-  }
+  },
+  // proxy: {
+  //   '/print/': {
+  //     target: process.env.baseUrl || 'http://localhost',
+  //     pathRewrite: {'^/print/': ''},
+  //     response_type: 'blob'
+  //   }
+  // }
 }

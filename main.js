@@ -98,3 +98,53 @@ ipcMain.on('addFingerTemplate', (event, arg) => {
 ipcMain.on('initEmployeeFingerPrint', (event, arg) => {
 	ZKFPScan.initEmployeeFingerPrint(arg)
 })
+
+const { exec } = require('child_process')
+const printQueue = []
+const clpath = !config.dev ? path.join(path.dirname(app.getPath('exe')), 'tools', 'CLPrint.exe') : path.join((app.getAppPath()), 'tools', 'CLPrint.exe')
+
+ipcMain.on('print', (event, arg) => {
+	printQueue.push(arg)
+	if (printQueue.length === 1) printReport(printQueue[0]) // ปริ้นเมื่อเป็นรายการเดียวที่อยู่ในคิว
+})
+
+function printReport(arg) {
+	messageToRender(`reportUrl: ${arg.url}`) //
+	win.webContents.downloadURL(arg.url)
+
+	win.webContents.session.once('will-download', (event, item, webContents) => {
+		const filePath = path.join(app.getPath('temp'), `attendance${Date.now()}.pdf`)
+		messageToRender(filePath) //
+		item.setSavePath(filePath)
+
+		return item.once('done', (event, state) => {
+			if (state === 'completed') {
+				if (arg.preview || false) {
+					exec(filePath, (error, stdout, stderr) => {
+						if (error) console.error(`exec error: ${error}`)
+					})
+				} else {
+					const printCommand = `"${clpath}" /notcentered /scale:none /orientation:${arg.orientation || 'portrait'} /pdffile:"${filePath}" /print`
+					messageToRender(printCommand)
+
+					exec(printCommand, (error, stdout, stderr) => {
+						if (error) {
+							console.error(`exec error: ${error}`)
+							messageToRender(`exec error: ${error}`)
+						}
+					})
+				}
+			} else {
+				messageToRender(`Download failed: ${state}`)
+			}
+
+			printQueue.splice(0, 1) // ลบอันแรกออกจากคิว
+			if (printQueue.length > 0) printReport(printQueue[0]) // ถ้าคิวยังไม่หมดทำต่อไป
+			webContents.send('finish-print')
+		})
+	})
+}
+
+function messageToRender(data) {
+	win.webContents.send('browserLog', data)
+}

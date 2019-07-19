@@ -14,7 +14,9 @@
               :return-object="true"
           />
         </v-flex>
-        <v-flex />
+        <v-flex>
+          <v-btn @click="print">print</v-btn>
+        </v-flex>
       </v-layout>
       <v-divider class="my-3"/>
       <v-table :table="tableData">
@@ -135,6 +137,26 @@ export default {
         }
       })
     },
+    async print () {
+      try {
+        // const res = await this.$axios.$get(`/v2/api/salary_calculates/290/download-slip-salary`, {'responseType': 'blob'})
+        const res = await this.$axios.$get(`/print/v2/api/salary_calculates/290/download-slip-salary`)
+        console.log(res, 'ok')
+        // let url = URL.createObjectURL(res.data)
+
+        // if (res.data.message) {
+        //   this.errorAlert(res.data.message)
+        // } else {
+        //   if (res.data) await this.$printReport({
+        //     url: url,
+        //     preview: true
+        //   })
+        // }
+        this.fetchData()
+      } catch (e) {
+        this.errorAlert(e)
+      }
+    }
   }
 }
 </script>
