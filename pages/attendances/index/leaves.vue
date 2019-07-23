@@ -27,7 +27,9 @@
             <v-date-picker v-model="filter.month" locale="th" type="month" @input="$refs.dialog.save(filter.month)" scrollable />
           </v-dialog>
         </v-flex>
-        <v-flex />
+        <v-flex>
+          <v-btn outline color="success" @click="print" :loading="loading">ปริ้นกะงาน</v-btn>
+        </v-flex>
       </v-layout>
       <LeaveTable v-if="!loading" :data="employees" :month="filter.month" @onCellClick="handleLeaveTableClick" />
       <LeaveModal :data="selectedDate" @closed="closedLeaveModal" />
@@ -130,6 +132,26 @@ export default {
         employee: null
       }
       if (state) this.fetchData()
+    },
+    async print () {
+      try {
+        this.loading = true
+        await this.$axios.$get(`/v2/api/leaves/attendance-report`, {
+          'params' : {
+            branch_id: this.filter.branch.id,
+            from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
+            to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
+          }
+        })
+        await this.$printReport({
+          file_name: `attendance_${this.filter.branch.id}_${this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD')}.pdf`,
+          preview: true
+        })
+      } catch (e) {
+        this.errorAlert(e)
+      } finally {
+        this.loading = false
+      }
     }
   }
 }

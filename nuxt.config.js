@@ -35,8 +35,7 @@ module.exports = {
   modules: [
     '@nuxtjs/axios',
     '@nuxtjs/auth',
-    '@nuxtjs/vuetify',
-    '@nuxtjs/proxy'
+    '@nuxtjs/vuetify'
   ],
   plugins: [
     { src: '~/plugins/index' },
@@ -66,17 +65,9 @@ module.exports = {
     }
   },
   axios: {
-    // proxy: true,
     baseURL: process.env.baseUrl || 'http://localhost',
     headers: {
       'X-Requested-With': 'XMLHttpRequest'
     }
-  },
-  // proxy: {
-  //   '/print/': {
-  //     target: process.env.baseUrl || 'http://localhost',
-  //     pathRewrite: {'^/print/': ''},
-  //     response_type: 'blob'
-  //   }
-  // }
+  }
 }

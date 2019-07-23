@@ -99,6 +99,7 @@ ipcMain.on('initEmployeeFingerPrint', (event, arg) => {
 	ZKFPScan.initEmployeeFingerPrint(arg)
 })
 
+require('dotenv').config()
 const { exec } = require('child_process')
 const printQueue = []
 const clpath = !config.dev ? path.join(path.dirname(app.getPath('exe')), 'tools', 'CLPrint.exe') : path.join((app.getAppPath()), 'tools', 'CLPrint.exe')
@@ -109,12 +110,12 @@ ipcMain.on('print', (event, arg) => {
 })
 
 function printReport(arg) {
-	messageToRender(`reportUrl: ${arg.url}`) //
+	messageToRender(`reportUrl: ${arg.url}`)
 	win.webContents.downloadURL(arg.url)
 
 	win.webContents.session.once('will-download', (event, item, webContents) => {
-		const filePath = path.join(app.getPath('temp'), `attendance${Date.now()}.pdf`)
-		messageToRender(filePath) //
+		const filePath = path.join(app.getPath('temp'), arg.file_name)
+		messageToRender(filePath)
 		item.setSavePath(filePath)
 
 		return item.once('done', (event, state) => {
