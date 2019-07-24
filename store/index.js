@@ -23,8 +23,6 @@ const createStore = () => {
       async serverTime ({ commit, state }, payload) {
         try {
           const res = await axios({method: "GET", url: "https://ts.tssys.tk/api/server_time"})
-          // const res = await this.$axios.$get('/v2/api/server-time')
-          console.log(res.data)
           commit('serverTime', res.data)
         } catch (e) {
           throw e
