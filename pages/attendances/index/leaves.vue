@@ -145,6 +145,7 @@ export default {
         })
         await this.$printReport({
           file_name: `attendance_${this.filter.branch.id}_${this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD')}.pdf`,
+          orientation: 'landscape',
           preview: true
         })
       } catch (e) {

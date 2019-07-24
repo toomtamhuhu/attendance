@@ -110,7 +110,6 @@ ipcMain.on('print', (event, arg) => {
 })
 
 function printReport(arg) {
-	messageToRender(`reportUrl: ${arg.url}`)
 	win.webContents.downloadURL(arg.url)
 
 	win.webContents.session.once('will-download', (event, item, webContents) => {
