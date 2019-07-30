@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-tabs>
-      <v-tab to="/settings/finger-print">เพิ่มนิ้ว พนง.</v-tab>
+      <v-tab to="/finger-print">เพิ่มนิ้ว พนง.</v-tab>
     </v-tabs>
     <br>
     <v-page>
@@ -45,6 +45,11 @@
               <span>สแกนนิ้ว</span>
             </v-tooltip>
           </template>
+
+          <v-btn slot="reset_finger" slot-scope="{ data }" small outline color="indigo" :loading="deletting" @click="resetFinger(data)" v-if="data.finger_print1 || data.finger_print2">
+            reset นิ้ว
+          </v-btn>
+
         </v-table>
       </div>
     </v-page>
@@ -53,7 +58,9 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { ipcRenderer } from 'electron'
+import axios from 'axios'
+import { mapGetters } from 'vuex'
 import ManageFingerPrintModal from '@/components/finger-prints/ManageFingerPrintModal'
 
 export default {
@@ -71,7 +78,8 @@ export default {
         open: false,
         item: null,
         number: null
-      }
+      },
+      deletting: false
     }
   },
 
@@ -86,7 +94,8 @@ export default {
           {text: 'ชื่อเล่น', value: 'nickname'},
           {text: 'สาขา', value: 'branch.name'},
           {text: 'นิ้ว1', value: 'finger_print1', slot: true},
-          {text: 'นิ้ว2', value: 'finger_print2', slot: true}
+          {text: 'นิ้ว2', value: 'finger_print2', slot: true},
+          {text: 'reset นิ้ว', value: 'reset_finger', slot: true}
         ],
         desserts: this.employees
       }
@@ -112,6 +121,48 @@ export default {
     updateFingerPrint (data) {
       this.$store.commit('Employees/updateItem', data)
     },
+    async resetFinger (employee) {
+      if (!confirm('reset นิ้ว?')) return
+
+      this.deletting = true
+      try {
+        const res = await axios({
+          method: 'POST',
+          url: 'http://vue-hrm.huhu/graphql',
+          data: {
+            query: `mutation ($id: Int!, $finger_print1: String, $finger_print2: String) {
+              updateEmployeeFingerPrint(id: $id, finger_print1: $finger_print1, finger_print2: $finger_print2) {
+                  id
+                  name
+                  nickname
+                  finger_print1
+                  finger_print2
+                  branch_id
+                  branch {
+                    name
+                  }
+                }
+              }`,
+            variables: {
+              id: employee.id,
+              finger_print1: null,
+              finger_print2: null
+            }
+          }
+        })
+
+        const finger_print = ipcRenderer.sendSync('deleteFingerTemplate', {
+          id: res.data.data.updateEmployeeFingerPrint.id,
+        })
+
+        this.noticeAlert(finger_print)
+        this.updateFingerPrint(res.data.data.updateEmployeeFingerPrint)
+      } catch (e) {
+        console.log(e)
+      } finally {
+        this.deletting = false
+      }
+    }
   }
 }
 </script>

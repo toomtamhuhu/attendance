@@ -192,6 +192,28 @@ function addFingerTemplate (data) {
   }
 }
 
+function deleteFingerTemplate(employee) {
+  let finger_1 = Number(`1${employee.id}`)
+  let finger_2 = Number(`2${employee.id}`)
+
+  try {
+    zkfp.zkfpm_db_del(finger_1);
+    zkfp.zkfpm_db_del(finger_2);
+  } catch (e) {
+    return {
+      process: 'delete',
+      status: false,
+      notice: e
+    }
+  }
+
+  return {
+    process: 'delete',
+    status: true,
+    notice: 'ลบลายนิ้วมือสำเร็จ'
+  }
+}
+
 function initEmployeeFingerPrint (employees) {
   if (zkfp === null) return
 
@@ -231,5 +253,6 @@ module.exports = {
   openFingerRegister,
   closeFingerRegister,
   initEmployeeFingerPrint,
-  addFingerTemplate
+  addFingerTemplate,
+  deleteFingerTemplate
 }

@@ -88,6 +88,10 @@ export default {
     this.filter.state = this.states[0]
   },
 
+  beforeDestroy () {
+    this.removeIpcRenderer()
+  },
+
   methods: {
     async fetchData() {
       this.loading = true
@@ -134,6 +138,9 @@ export default {
           this.submit()
         }
       })
+    },
+    removeIpcRenderer () {
+      ipcRenderer.removeAllListeners('getFingerPrintDetail')
     }
   }
 }

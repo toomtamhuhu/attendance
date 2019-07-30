@@ -95,6 +95,10 @@ ipcMain.on('addFingerTemplate', (event, arg) => {
 	event.returnValue = ZKFPScan.addFingerTemplate(arg)
 })
 
+ipcMain.on('deleteFingerTemplate', (event, arg) => {
+	event.returnValue = ZKFPScan.deleteFingerTemplate(arg)
+})
+
 ipcMain.on('initEmployeeFingerPrint', (event, arg) => {
 	ZKFPScan.initEmployeeFingerPrint(arg)
 })
