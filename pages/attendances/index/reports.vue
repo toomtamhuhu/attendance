@@ -139,9 +139,6 @@ export default {
     }
   },
 
-  created() {
-  },
-
   methods: {
     async fetchData() {
       this.loading = true
@@ -155,11 +152,15 @@ export default {
             workRule: true
           }
         })
-        this.leaves = _.reduce(res, (pre, cur) => {
+
+        this.leaves = this.filter.employee.length > 0 ? _.reduce(res, (pre, cur) => {
           let filteredEmployee = _.find(this.filter.employee, (item) => {
             return item.id === cur.employee_id
           })
-          if (filteredEmployee) pre.push(cur)
+          if (filteredEmployee && cur.type === -1) pre.push(cur)
+          return pre
+        }, []) : _.reduce(res, (pre, cur) => {
+          if (cur.type === -1) pre.push(cur)
           return pre
         }, [])
       } catch (e) {

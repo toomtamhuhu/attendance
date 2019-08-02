@@ -152,3 +152,27 @@ function printReport(arg) {
 function messageToRender(data) {
 	win.webContents.send('browserLog', data)
 }
+
+const fs = require('fs')
+const configPath = !config.dev ? path.join(path.dirname(app.getPath('exe')), 'configs') : path.join(app.getAppPath(), 'configs')
+const userPath = path.join(configPath, 'user.json')
+ipcMain.on('defaultUser', () => {
+	try {
+		const user = JSON.parse(fs.readFileSync(userPath, 'utf8'))
+		return win.webContents.send('defaultUser', user)
+	} catch (e) {
+		console.log(e)
+		messageToRender(e)
+	}
+})
+ipcMain.on('setDefaultUser', (event, arg) => {
+	try {
+		if (!fs.existsSync(configPath)) fs.mkdirSync(configPath)
+		fs.writeFileSync(userPath, JSON.stringify(arg), 'utf8')
+		return win.webContents.send('setDefaultUser')
+	} catch (e) {
+		console.log(e)
+		messageToRender(e)
+	}
+})
+

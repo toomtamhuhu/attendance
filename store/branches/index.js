@@ -34,7 +34,7 @@ export default {
       try {
         const res = await axios({
           method: "GET",
-          url: "http://vue-hrm.huhu/graphql",
+          url: "http://hr.tsgoldprices.tk/graphql",
           data: {
             query: `{
             branchesByDept(department_id: 4) {

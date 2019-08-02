@@ -9,14 +9,17 @@
     "appId": "",
     "directories": {
       "buildResources": "static"
-    }
+    },
+    "extraFiles": [
+      "tools/*",
+      "configs",
+      "!configs/**/*"
+    ]
   },
-  "extraFiles": [
-    "tools/*"
-  ],
   "scripts": {
     "dev": "cross-env NODE_ENV=DEV electron .",
-    "build": "nuxt build && electron-builder --x64 --ia32"
+    "build": "nuxt build && electron-builder --x64 --ia32",
+    "rebuild": "electron-rebuild"
   },
   "dependencies": {
     "@nuxtjs/auth": "^4.6.0",
@@ -41,6 +44,7 @@
     "electron": "^2.0.18",
     "electron-builder": "^20.8.1",
     "electron-devtools-installer": "^2.2.3",
+    "electron-rebuild": "^1.8.5",
     "eslint": "^4.15.0",
     "eslint-friendly-formatter": "^3.0.0",
     "eslint-loader": "^1.7.1",

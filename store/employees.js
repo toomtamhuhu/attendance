@@ -31,7 +31,7 @@ export default {
       try {
         const res = await axios({
           method: "GET",
-          url: "http://vue-hrm.huhu/graphql",
+          url: "http://hr.tsgoldprices.tk/graphql",
           data: {
             query: `{
             employees(work_status: true, branch_id: [16, 17]) {

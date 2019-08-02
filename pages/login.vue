@@ -42,6 +42,16 @@ export default {
     }
   },
 
+  created () {
+    ipcRenderer.send('defaultUser')
+    ipcRenderer.once('defaultUser', (event, arg) => {
+      if (arg) {
+        this.form.username = arg.username
+        this.form.password = arg.password
+      }
+    })
+  },
+
   mounted () {
     ipcRenderer.send('startFingerScanner')
   },
@@ -52,6 +62,10 @@ export default {
       try {
         await this.$auth.loginWith('local', {
           data: this.form
+        })
+        ipcRenderer.send('setDefaultUser', {
+          "username": this.form.username,
+          "password": this.form.password
         })
         this.$router.push('/')
       } catch (e) {

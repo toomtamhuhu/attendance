@@ -84,7 +84,7 @@ export default {
       try {
         const res = await axios({
           method: "GET",
-          url: "http://vue-hrm.huhu/graphql",
+          url: "http://hr.tsgoldprices.tk/graphql",
           data: {
             query: `query ($from: String, $to: String) {
             employeeLeaveDateRangeQuery(branch_id: ${this.filter.branch.id}, from: $from, to: $to) {
@@ -143,9 +143,9 @@ export default {
             to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
           }
         })
+
         await this.$printReport({
           file_name: `attendance_${this.filter.branch.id}_${this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD')}.pdf`,
-          orientation: 'landscape',
           preview: true
         })
       } catch (e) {

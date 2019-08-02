@@ -128,7 +128,7 @@ export default {
       try {
         const res = await axios({
           method: 'POST',
-          url: 'http://vue-hrm.huhu/graphql',
+          url: 'http://hr.tsgoldprices.tk/graphql',
           data: {
             query: `mutation ($id: Int!, $finger_print1: String, $finger_print2: String) {
               updateEmployeeFingerPrint(id: $id, finger_print1: $finger_print1, finger_print2: $finger_print2) {

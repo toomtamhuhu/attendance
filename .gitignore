@@ -13,4 +13,6 @@ dist
 # Mac OS
 .DS_Store
 
+configs/*
+
 c_addons/*/build
