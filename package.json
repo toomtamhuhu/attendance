@@ -36,6 +36,7 @@
     "utf-8-validate": "^5.0.2",
     "vue-notification": "^1.3.16",
     "vue-swatches": "^1.0.3",
+    "vue2-editor": "^2.10.0",
     "vuetify-loader": "^1.3.0"
   },
   "devDependencies": {

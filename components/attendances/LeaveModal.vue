@@ -152,7 +152,7 @@ export default {
         if (this.form.id) {
           const res = await axios({
             method: 'POST',
-            url: 'http://hr.tsgoldprices.tk/graphql',
+            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
             data: {
               query: `mutation ($id: Int!, $employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
               updateLeave(id: $id, employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
@@ -180,7 +180,7 @@ export default {
         } else {
           const res = await axios({
             method: 'POST',
-            url: 'http://hr.tsgoldprices.tk/graphql',
+            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
             data: {
               query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
               createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
@@ -219,7 +219,7 @@ export default {
       try {
         const res = await axios({
           method: 'POST',
-          url: 'http://hr.tsgoldprices.tk/graphql',
+          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
           data: {
             query: `mutation ($id: Int!) {
               deleteLeave(id: $id) {

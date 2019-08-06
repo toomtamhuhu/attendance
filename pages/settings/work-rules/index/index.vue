@@ -152,7 +152,7 @@ export default {
         if (this.form.id) {
           const res = await axios({
             method: 'POST',
-            url: 'http://hr.tsgoldprices.tk/graphql',
+            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
             data: {
               query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!) {
               updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color) {

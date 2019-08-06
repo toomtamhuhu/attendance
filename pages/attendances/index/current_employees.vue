@@ -16,10 +16,29 @@
 
 <script>
 export default {
+  async asyncData  ({ app }) {
+    try {
+      const leaves = await app.$axios.$get('/v2/api/leaves', {
+        'params': {
+          from: app.moment().startOf('month').format('YYYY-MM-DD'),
+          to: app.moment().endOf('month').format('YYYY-MM-DD'),
+          state: 'work_in_state',
+          withEmployee: true,
+          workRule: true
+        }
+      })
+      return { leaves: _.reduce(leaves, (pre, cur) => {
+        if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0) pre.push(cur)
+        return pre
+        }, []) }
+    } catch (e) {
+      console.log(e)
+    }
+  },
+
   data() {
     return {
-      loading: false,
-      leaves: []
+      loading: false
     }
   },
 
@@ -27,7 +46,7 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'ชื่อ', value: 'employee.name'},
+          {text: 'ชื่อ', value: 'employee', callback: data => `${data.employee.name} (${data.employee.nickname})`},
           {
             text: 'วันที่',
             value: 'leave_date',
@@ -42,32 +61,6 @@ export default {
         desserts: this.leaves
       }
       return table
-    }
-  },
-
-  mounted() {
-    this.fetchData()
-  },
-
-  methods: {
-    async fetchData() {
-      this.loading = true
-      try {
-        this.leaves = await this.$axios.$get('/v2/api/leaves', {
-          'params': {
-            from: this.$moment().format('YYYY-MM-DD'),
-            to: this.$moment().format('YYYY-MM-DD'),
-            state: 'work_in_state',
-            withEmployee: true,
-            workRule: true
-          }
-        })
-        this.leaves = res
-      } catch (e) {
-        // this.errorAlert(e)
-      } finally {
-        this.loading = false
-      }
     }
   }
 }

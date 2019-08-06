@@ -31,7 +31,7 @@ export default {
       try {
         const res = await axios({
           method: "GET",
-          url: "http://hr.tsgoldprices.tk/graphql",
+          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
           data: {
             query: `{
             employees(work_status: true, branch_id: [16, 17]) {

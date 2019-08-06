@@ -90,14 +90,14 @@ export default {
 
   methods: {
     dateStyle(date) {
-      return {'color': this.$moment(date).locale('th').format('dddd') === 'อาทิตย์' ? 'red' : null}
+      return {'color': this.$moment(date).locale('th').format('dddd') === 'อาทิตย์' ? 'red' : this.$moment(date).locale('th').format('dddd') === 'เสาร์' ? '#e000e1' : null}
     },
     changeTypeToObj(data, style) {
       if(typeof data.type === 'number') data.type = _.find(this.types, {'value': data.type})
       let work_rule = _.find(this.work_rules, {'id': data.work_rule_id})
 
       if (style) {
-        return data.type.value === -1 ? work_rule.color : data.type.value === 1 ? '#36f' : data.type.value === 2 ? '#f63' : '#852'
+        return data.type.value === -1 ? typeof work_rule !== 'undefined' ? work_rule.color : null : data.type.value === 1 ? '#36f' : data.type.value === 2 ? '#f63' : '#852'
       } else {
         return data.type.value === -1
           ? typeof work_rule !== 'undefined'

@@ -9,5 +9,14 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-layout v-if="$slots['footer']">
+      <v-flex>
+        <v-card white>
+          <v-container>
+            <slot name="footer" />
+          </v-container>
+        </v-card>
+      </v-flex>
+    </v-layout>
   </div>
 </template>

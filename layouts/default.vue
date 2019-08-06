@@ -46,10 +46,11 @@ export default {
 			{label: 'เพิ่มนิ้ว พนง.', link: '/finger-print', permission: this.hasRole('HR') || this.hasRole('ADMIN')},
 			{
 				label: 'ตั้งค่า',
-				permission: this.hasRole('ADMIN'),
+				permission: this.hasRole('HR') || this.hasRole('ADMIN'),
 				submenu: [
 					// { label: 'ผู้ใช้', link: '/settings/users' },
-					{ label: 'กะการทำงาน', link: '/settings/work-rules' }
+					{ label: 'ข่าวสาร', link: '/settings/news', permission: this.hasRole('HR') || this.hasRole('ADMIN') },
+					{ label: 'กะการทำงาน', link: '/settings/work-rules', permission: this.hasRole('ADMIN') }
 				]
 			}
 		])

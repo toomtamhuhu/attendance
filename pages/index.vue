@@ -1,30 +1,27 @@
 <template>
 	<v-app>
-		<v-content>
-			<v-container>Hello word</v-container>
-		</v-content>
+		<v-container v-if="latestNews">
+			<v-layout align-start row fill-height>
+				<span v-html="latestNews.description"></span>
+			</v-layout>
+		</v-container>
 	</v-app>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 export default {
-	data() {
-		return {
-			users: []
+	async fetch ({ store }) {
+		store.dispatch('News/fetch')
+	},
+	computed: {
+		...mapGetters({
+			news: 'News/data'
+		}),
+		latestNews() {
+			return _.last(this.news)
 		}
 	}
 }
 </script>
-
-<style scoped>
-.container {
-	min-height: 100vh;
-	display: flex;
-	justify-content: center;
-	align-items: center;
-	text-align: center;
-}
-.btn {
-	margin: 0 8px;
-}
-</style>

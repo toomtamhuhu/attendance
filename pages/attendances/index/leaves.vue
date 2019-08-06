@@ -34,11 +34,19 @@
       <LeaveTable v-if="!loading" :data="employees" :month="filter.month" @onCellClick="handleLeaveTableClick" />
       <LeaveModal :data="selectedDate" @closed="closedLeaveModal" />
     </div>
+    <div slot="footer">
+      <v-layout wrap v-for="(work_rules, index) in WorkRuleSlice" :key="index">
+        <v-flex v-for="(work_rule, i) in work_rules" :key="i" xs4>
+          <v-chip label :color="work_rule.color">{{ work_rule.short_name }}</v-chip> ({{ `0000-01-01 ${work_rule.work_start}` | moment('HH:mm') }} - {{ `0000-01-01 ${work_rule.work_end}` | moment('HH:mm') }})
+        </v-flex>
+      </v-layout>
+    </div>
   </v-page>
 </template>
 
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 import BranchSelector from '@/components/layouts/BranchSelector'
 import LeaveTable from '@/components/attendances/LeaveTable'
 import LeaveModal from '@/components/attendances/LeaveModal'
@@ -69,6 +77,15 @@ export default {
     }
   },
 
+  computed: {
+  ...mapGetters({
+      work_rules: 'WorkRules/data'
+    }),
+    WorkRuleSlice() {
+      return _.chunk(this.work_rules, 3)
+    }
+  },
+
   watch: {
     'filter.branch' (data) {
       if (data) this.fetchData()
@@ -83,8 +100,8 @@ export default {
       this.loading = true
       try {
         const res = await axios({
-          method: "GET",
-          url: "http://hr.tsgoldprices.tk/graphql",
+          method: 'POST',
+          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
           data: {
             query: `query ($from: String, $to: String) {
             employeeLeaveDateRangeQuery(branch_id: ${this.filter.branch.id}, from: $from, to: $to) {

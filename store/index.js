@@ -6,6 +6,7 @@ import Permissions from './permissions'
 import WorkRules from './work_rules'
 import Users from './users'
 import Employees from './employees'
+import News from './news'
 
 const createStore = () => {
   return new Vuex.Store({
@@ -35,7 +36,8 @@ const createStore = () => {
       Permissions,
       WorkRules,
       Users,
-      Employees
+      Employees,
+      News
     }
   })
 }
