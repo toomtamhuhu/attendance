@@ -4,7 +4,13 @@
     <list default="true" id="29483a66-5c40-4468-905d-80bb9f77aeaf" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/store/employees.js" beforeDir="false" afterPath="$PROJECT_DIR$/store/employees.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/components/attendances/LeaveModal.vue" beforeDir="false" afterPath="$PROJECT_DIR$/components/attendances/LeaveModal.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/layouts/default.vue" beforeDir="false" afterPath="$PROJECT_DIR$/layouts/default.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/attendances/index/current_employees.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/attendances/index/current_employees.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/attendances/index/index.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/attendances/index/index.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/attendances/index/reports.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/attendances/index/reports.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pages/login.vue" beforeDir="false" afterPath="$PROJECT_DIR$/pages/login.vue" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -20,35 +26,67 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pages/attendances/index/leaves.vue">
+        <entry file="file://$PROJECT_DIR$/pages/attendances/index/index.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="34" column="17" selection-start-line="34" selection-start-column="7" selection-end-line="34" selection-end-column="17" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/components/attendances/LeaveModal.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="181">
-              <caret line="155" column="19" selection-start-line="155" selection-start-column="19" selection-end-line="155" selection-end-column="19" />
+            <state relative-caret-position="272">
+              <caret line="32" selection-start-line="32" selection-end-line="32" />
               <folding>
-                <element signature="e#6760#7909#0" />
-                <element signature="e#8120#8920#0" />
-                <element signature="e#8939#9240#0" />
+                <element signature="e#1640#1678#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/pages/attendances/index/index.vue">
+        <entry file="file://$PROJECT_DIR$/pages/attendances/index/reports.vue">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="125" column="54" selection-start-line="125" selection-start-column="48" selection-end-line="125" selection-end-column="54" />
+            <state relative-caret-position="257">
+              <caret line="72" column="27" selection-start-line="72" selection-start-column="27" selection-end-line="72" selection-end-column="27" />
               <folding>
-                <element signature="e#1640#1678#0" expanded="true" />
+                <element signature="n#v-flex#0;n#v-layout#1;n#div#0;n#v-page#0;n#template#0;n#!!top" />
+                <element signature="n#v-flex#1;n#v-layout#1;n#div#0;n#v-page#0;n#template#0;n#!!top" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/plugins/print-report.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="238">
+              <caret line="14" selection-start-line="14" selection-end-line="14" />
+              <folding>
+                <element signature="e#0#21#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/package.json">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="204">
+              <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/pages/login.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="170">
+              <caret line="19" column="78" selection-start-line="19" selection-start-column="78" selection-end-line="19" selection-end-column="78" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/layouts/default.vue">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="408">
+              <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+              <folding>
+                <element signature="e#225#258#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -58,35 +96,7 @@
         <entry file="file://$PROJECT_DIR$/.env">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="136">
-              <caret line="8" column="56" selection-start-line="8" selection-start-column="56" selection-end-line="8" selection-end-column="56" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/components/finger-prints/ManageFingerPrintModal.vue">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="141">
-              <caret line="158" column="10" selection-start-line="158" selection-start-column="10" selection-end-line="158" selection-end-column="10" />
-              <folding>
-                <element signature="e#1357#1395#0" expanded="true" />
-                <element signature="e#2041#2756#0" />
-                <element signature="e#4516#4706#0" />
-                <element signature="e#4895#5629#0" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/zkfp-scan.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="206">
-              <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
-              <folding>
-                <element signature="e#468#1314#0" />
-                <element signature="n#!!block;n#threadCapture#0" />
-              </folding>
+              <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
             </state>
           </provider>
         </entry>
@@ -95,8 +105,6 @@
   </component>
   <component name="FindInProjectRecents">
     <findStrings>
-      <find>onSubmitted</find>
-      <find>add</find>
       <find>removeIpcRenderer</find>
       <find>อีำ</find>
       <find>vue</find>
@@ -111,11 +119,8 @@
       <find>hr.t</find>
       <find>hr.tsgold</find>
       <find>hr.tsgoldprices</find>
-      <find>console.log</find>
       <find>deletting</find>
       <find>types</find>
-      <find>color</find>
-      <find>console</find>
       <find>process.env.g</find>
       <find>dateStyle</find>
       <find>swat</find>
@@ -125,6 +130,11 @@
       <find>hr.ts</find>
       <find>consol</find>
       <find>updateEmployeeFingerPrint</find>
+      <find>console</find>
+      <find>console.log</find>
+      <find>conso</find>
+      <find>print</find>
+      <find>color</find>
     </findStrings>
     <replaceStrings>
       <replace />
@@ -160,24 +170,16 @@
         <option value="$PROJECT_DIR$/pages/attendances/index/report.vue" />
         <option value="$PROJECT_DIR$/zkfp-scan.js" />
         <option value="$PROJECT_DIR$/nuxt.config.js" />
-        <option value="$PROJECT_DIR$/plugins/print-report.js" />
         <option value="$PROJECT_DIR$/main.js" />
-        <option value="$PROJECT_DIR$/pages/login.vue" />
         <option value="$PROJECT_DIR$/.gitignore" />
-        <option value="$PROJECT_DIR$/package.json" />
         <option value="$PROJECT_DIR$/middleware/prepareData.js" />
-        <option value="$PROJECT_DIR$/pages/attendances/index/reports.vue" />
         <option value="$PROJECT_DIR$/pages/attendances/index.vue" />
         <option value="$PROJECT_DIR$/components/layouts/Page.vue" />
-        <option value="$PROJECT_DIR$/pages/attendances/index/index.vue" />
-        <option value="$PROJECT_DIR$/pages/attendances/index/current_employees.vue" />
         <option value="$PROJECT_DIR$/components/attendances/LeaveTable.vue" />
         <option value="$PROJECT_DIR$/store/index.js" />
         <option value="$PROJECT_DIR$/pages/finger-print/index.vue" />
-        <option value="$PROJECT_DIR$/components/attendances/LeaveModal.vue" />
         <option value="$PROJECT_DIR$/pages/settings/work-rules/index/index.vue" />
         <option value="$PROJECT_DIR$/pages/attendances/index/leaves.vue" />
-        <option value="$PROJECT_DIR$/layouts/default.vue" />
         <option value="$PROJECT_DIR$/store/work_rules/index.js" />
         <option value="$PROJECT_DIR$/store/news.js" />
         <option value="$PROJECT_DIR$/pages/settings/news/index.vue" />
@@ -185,8 +187,16 @@
         <option value="$PROJECT_DIR$/pages/index.vue" />
         <option value="$PROJECT_DIR$/store/branches/index.js" />
         <option value="$PROJECT_DIR$/store/employees.js" />
-        <option value="$PROJECT_DIR$/.env" />
         <option value="$PROJECT_DIR$/components/finger-prints/ManageFingerPrintModal.vue" />
+        <option value="$PROJECT_DIR$/.env" />
+        <option value="$PROJECT_DIR$/components/attendances/LeaveModal.vue" />
+        <option value="$PROJECT_DIR$/plugins/print-report.js" />
+        <option value="$PROJECT_DIR$/pages/attendances/index/index.vue" />
+        <option value="$PROJECT_DIR$/pages/attendances/index/current_employees.vue" />
+        <option value="$PROJECT_DIR$/pages/attendances/index/reports.vue" />
+        <option value="$PROJECT_DIR$/package.json" />
+        <option value="$PROJECT_DIR$/layouts/default.vue" />
+        <option value="$PROJECT_DIR$/pages/login.vue" />
       </list>
     </option>
   </component>
@@ -219,6 +229,11 @@
             <path>
               <item name="attendance" type="b2602c69:ProjectViewProjectNode" />
               <item name="attendance" type="462c0819:PsiDirectoryNode" />
+              <item name="layouts" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="attendance" type="b2602c69:ProjectViewProjectNode" />
+              <item name="attendance" type="462c0819:PsiDirectoryNode" />
               <item name="pages" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -237,8 +252,7 @@
             <path>
               <item name="attendance" type="b2602c69:ProjectViewProjectNode" />
               <item name="attendance" type="462c0819:PsiDirectoryNode" />
-              <item name="pages" type="462c0819:PsiDirectoryNode" />
-              <item name="finger-print" type="462c0819:PsiDirectoryNode" />
+              <item name="plugins" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -251,7 +265,7 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="ToolWindowTypeScript.ShowToolbar" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="D:/xampp/htdocs/vue-hrm" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../frontend" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.standard" value="true" />
     <property name="node.js.path.for.package.eslint" value="project" />
@@ -348,11 +362,13 @@
       <workItem from="1565316461424" duration="17000" />
       <workItem from="1565317048013" duration="472000" />
       <workItem from="1565335656921" duration="10271000" />
+      <workItem from="1565662146547" duration="149000" />
+      <workItem from="1565664231463" duration="9589000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="451162000" />
+    <option name="totallyTimeSpent" value="460900000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -366,7 +382,7 @@
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" weight="0.28290468" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.28290468" />
       <window_info id="Structure" order="1" weight="0.24962178" />
       <window_info id="npm" order="2" side_tool="true" />
       <window_info id="Favorites" order="3" side_tool="true" />
@@ -499,13 +515,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pages/login.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="138">
-          <caret line="42" column="4" lean-forward="true" selection-start-line="42" selection-start-column="4" selection-end-line="42" selection-end-column="4" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/middleware/prepareData.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="204">
@@ -599,13 +608,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pages/attendances/index/current_employees.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="18" column="17" selection-start-line="18" selection-start-column="8" selection-end-line="18" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/pages/settings/news/index.vue">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="221">
@@ -691,13 +693,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/package.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="19" lean-forward="true" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/plugins/index.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="327">
@@ -710,42 +705,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/layouts/default.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="85">
-          <caret line="5" column="17" selection-start-line="5" selection-start-column="17" selection-end-line="5" selection-end-column="17" />
-          <folding>
-            <element signature="e#225#258#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/store/employees.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="223">
           <caret line="32" column="24" lean-forward="true" selection-start-line="32" selection-start-column="24" selection-end-line="32" selection-end-column="24" />
-          <folding>
-            <element signature="e#0#21#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pages/attendances/index/reports.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1564">
-          <caret line="152" column="11" lean-forward="true" selection-start-line="152" selection-start-column="11" selection-end-line="152" selection-end-column="11" />
-          <folding>
-            <element signature="n#v-flex#0;n#v-layout#1;n#div#0;n#v-page#0;n#template#0;n#!!top" />
-            <element signature="n#v-flex#1;n#v-layout#1;n#div#0;n#v-page#0;n#template#0;n#!!top" />
-            <element signature="e#3813#4519#0" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/print-report.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="3" selection-start-line="3" selection-end-line="3" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
@@ -765,27 +728,21 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/pages/attendances/index/index.vue">
+    <entry file="file://$PROJECT_DIR$/components/finger-prints/ManageFingerPrintModal.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="125" column="54" selection-start-line="125" selection-start-column="48" selection-end-line="125" selection-end-column="54" />
+        <state relative-caret-position="260">
+          <caret line="165" column="35" selection-start-line="165" selection-start-column="35" selection-end-line="165" selection-end-column="35" />
           <folding>
-            <element signature="e#1640#1678#0" expanded="true" />
+            <element signature="e#1357#1395#0" expanded="true" />
+            <element signature="e#2041#2756#0" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/pages/attendances/index/leaves.vue">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" column="17" selection-start-line="34" selection-start-column="7" selection-end-line="34" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/zkfp-scan.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="206">
-          <caret line="150" column="17" selection-start-line="150" selection-start-column="17" selection-end-line="150" selection-end-column="17" />
+        <state relative-caret-position="177">
+          <caret line="158" column="9" selection-start-line="158" selection-start-column="4" selection-end-line="158" selection-end-column="9" />
           <folding>
             <element signature="e#468#1314#0" />
             <element signature="n#!!block;n#threadCapture#0" />
@@ -795,8 +752,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/components/attendances/LeaveModal.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="181">
-          <caret line="155" column="19" selection-start-line="155" selection-start-column="19" selection-end-line="155" selection-end-column="19" />
+        <state relative-caret-position="297">
+          <caret line="43" column="46" selection-start-line="43" selection-start-column="46" selection-end-line="43" selection-end-column="46" />
           <folding>
             <element signature="e#6760#7909#0" />
             <element signature="e#8120#8920#0" />
@@ -805,23 +762,84 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/.env">
+    <entry file="file://$PROJECT_DIR$/pages/attendances/index/leaves.vue">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="136">
-          <caret line="8" column="56" selection-start-line="8" selection-start-column="56" selection-end-line="8" selection-end-column="56" />
+        <state relative-caret-position="170">
+          <caret line="34" column="17" selection-start-line="34" selection-start-column="7" selection-end-line="34" selection-end-column="17" />
+          <folding>
+            <element signature="e#2742#3878#0" />
+            <element signature="e#3913#4066#0" />
+            <element signature="e#4097#4262#0" />
+          </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/components/finger-prints/ManageFingerPrintModal.vue">
+    <entry file="file://$PROJECT_DIR$/.env">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="141">
-          <caret line="158" column="10" selection-start-line="158" selection-start-column="10" selection-end-line="158" selection-end-column="10" />
+        <state relative-caret-position="136">
+          <caret line="8" column="50" selection-start-line="8" selection-start-column="50" selection-end-line="8" selection-end-column="50" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/attendances/index/index.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="272">
+          <caret line="32" selection-start-line="32" selection-end-line="32" />
           <folding>
-            <element signature="e#1357#1395#0" expanded="true" />
-            <element signature="e#2041#2756#0" />
-            <element signature="e#4516#4706#0" />
-            <element signature="e#4895#5629#0" />
+            <element signature="e#1640#1678#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/attendances/index/current_employees.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="33" selection-start-line="24" selection-start-column="33" selection-end-line="24" selection-end-column="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/attendances/index/reports.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="72" column="27" selection-start-line="72" selection-start-column="27" selection-end-line="72" selection-end-column="27" />
+          <folding>
+            <element signature="n#v-flex#0;n#v-layout#1;n#div#0;n#v-page#0;n#template#0;n#!!top" />
+            <element signature="n#v-flex#1;n#v-layout#1;n#div#0;n#v-page#0;n#template#0;n#!!top" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/plugins/print-report.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="238">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
+          <folding>
+            <element signature="e#0#21#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/package.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="19" selection-start-line="12" selection-start-column="19" selection-end-line="12" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/layouts/default.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="408">
+          <caret line="24" column="37" selection-start-line="24" selection-start-column="37" selection-end-line="24" selection-end-column="37" />
+          <folding>
+            <element signature="e#225#258#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/pages/login.vue">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="170">
+          <caret line="19" column="78" selection-start-line="19" selection-start-column="78" selection-end-line="19" selection-end-column="78" />
         </state>
       </provider>
     </entry>

@@ -49,7 +49,7 @@
               </v-flex>
             </v-form>
           </v-card-text>
-          <v-card-actions v-if="form.work_in_state !== 1">
+          <v-card-actions>
             <v-spacer></v-spacer>
             <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id">ลบ</v-btn>
             <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>

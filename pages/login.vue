@@ -2,7 +2,7 @@
   <v-container grid-list-md text-xs-center>
     <v-layout row wrap>
       <v-flex xs10 offset-xs1>
-        ATTENDANCE
+        โปรแกรมลงเวลา เวอร์ชั่น{{ version }}
       </v-flex>
       <v-flex xs8 offset-xs2>
         <v-form>
@@ -17,7 +17,7 @@
               type="password"
               label="Password"
           />
-          <v-btn color="success" @click="login" :loading="loading">LOGIN</v-btn>
+          <v-btn color="success" @click="login" :loading="loading">เข้าสู่ระบบ</v-btn>
         </v-form>
       </v-flex>
     </v-layout>
@@ -25,12 +25,13 @@
 </template>
 
 <script>
-import { ipcRenderer } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 
 export default {
   layout: 'login',
   data () {
     return {
+      version: remote.app.getVersion(),
       loading: false,
       form: {
         username: null,

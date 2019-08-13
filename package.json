@@ -1,6 +1,6 @@
 {
   "name": "attendance",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Nuxt + Electron",
   "author": "TOOMTAMHUHU <t.t.toomtam@hotmail.com>",
   "private": true,

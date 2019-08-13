@@ -15,14 +15,20 @@
 
 <script>
 import { mapGetters } from 'vuex'
-import { ipcRenderer } from 'electron'
+import { remote, ipcRenderer } from 'electron'
 
 export default {
   middleware: ['auth', 'prepareData', 'serverTime'],
 
 	head () {
 		return {
-			title: `โปรแกรมลงเวลา - ผู้ใช่: ${this.$auth.user.name}`
+			title: `โปรแกรมลงเวลา เวอร์ชั่น${this.version} - ผู้ใช่: ${this.$auth.user.name}`
+		}
+	},
+
+	data () {
+  	return {
+			version: remote.app.getVersion(),
 		}
 	},
 

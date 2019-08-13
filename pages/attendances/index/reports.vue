@@ -65,10 +65,10 @@
       </v-layout>
       <v-divider class="my-3"/>
       <v-table :table="tableData">
-        <template slot="work_rule" slot-scope="{ data }">
+        <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
-        <span slot="in_out" slot-scope="{ data }">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
+        <span slot="in_out" slot-scope="{ data }" v-if="data.work_rule">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
         <span slot="work_in" slot-scope="{ data }" v-if="data.work_in_updated_at !== null">{{ data.work_in_updated_at | moment('HH:mm') }}</span>
         <span slot="work_out" slot-scope="{ data }" v-if="data.work_out_updated_at !== null">{{data.work_out_updated_at | moment('HH:mm')}}</span>
         <v-chip slot="late" slot-scope="{ data }" label :color="data.late === 0 ? 'success' : 'warning'" v-if="data.late !== null">{{ data.late | numeral }}</v-chip>
