@@ -34,7 +34,7 @@ export default {
           url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
           data: {
             query: `{
-            employees(work_status: true, branch_id: [15, 16, 17]) {
+            employees(work_status: true, branch_id: [15, 16, 17, 21]) {
                 id
                 name
                 nickname

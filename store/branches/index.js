@@ -37,7 +37,7 @@ export default {
           url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
           data: {
             query: `{
-            branchesByDept(department_id: [3, 4]) {
+            branchesByDept(department_id: [3, 4, 8]) {
                 id
                 name
               }
