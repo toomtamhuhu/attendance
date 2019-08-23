@@ -133,7 +133,7 @@ export default {
       } catch (e) {
         this.errorAlert(e)
       }
-    }, 500),
+    }, 200),
     listenIpcRenderer () {
       ipcRenderer.on('getFingerPrintDetail', (event, arg) => {
         if (arg.employee_id) {

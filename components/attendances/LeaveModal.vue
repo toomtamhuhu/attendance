@@ -51,7 +51,7 @@
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id">ลบ</v-btn>
+            <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id && form.work_in_state === 0">ลบ</v-btn>
             <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>
           </v-card-actions>
         </v-container>
@@ -111,7 +111,7 @@ export default {
           description: null,
           work_rule_id: null
         } : leave
-        if(typeof this.form.type === 'number') this.form.type = _.find(this.types, {'value': this.form.type})
+        if(typeof this.form.type === 'number' && this.form.type !== -2) this.form.type = _.find(this.types, {'value': this.form.type})
         if(typeof this.form.certificate === 'number') this.form.certificate = _.find(this.certificates, {'value': this.form.certificate === 1 ? true : false})
       } else {
         const index = _.findIndex(this.types, { 'value': 3 } )
@@ -150,33 +150,41 @@ export default {
         this.form.type = this.form.type.value
         this.form.certificate = this.form.certificate.value
         if (this.form.id) {
-          const res = await axios({
-            method: 'POST',
-            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-            data: {
-              query: `mutation ($id: Int!, $employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
-              updateLeave(id: $id, employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
-                  id
-                  employee_id
-                  type
-                  work_rule_id
-                  leave_date
-                  description
-                  certificate
-                }
-              }`,
-              variables: {
-                id: this.form.id,
-                employee_id: this.form.employee_id,
-                type: this.form.type,
-                work_rule_id: this.form.work_rule_id,
-                leave_date: this.form.leave_date,
-                description: this.form.description,
-                certificate: this.form.certificate
-              }
-            }
+          const v = await this.$axios.$put(`/v2/api/leaves/${this.form.id}`, {
+            id: this.form.id,
+            type: this.form.type,
+            work_rule_id: this.form.work_rule_id,
+            description: this.form.description,
+            certificate: this.form.certificate
           })
-          this.$emit('closed', res.status === 200 ? true : false)
+          console.log(v)
+          // const res = await axios({
+          //   method: 'POST',
+          //   url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
+          //   data: {
+          //     query: `mutation ($id: Int!, $employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
+          //     updateLeave(id: $id, employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
+          //         id
+          //         employee_id
+          //         type
+          //         work_rule_id
+          //         leave_date
+          //         description
+          //         certificate
+          //       }
+          //     }`,
+          //     variables: {
+          //       id: this.form.id,
+          //       employee_id: this.form.employee_id,
+          //       type: this.form.type,
+          //       work_rule_id: this.form.work_rule_id,
+          //       leave_date: this.form.leave_date,
+          //       description: this.form.description,
+          //       certificate: this.form.certificate
+          //     }
+          //   }
+          // })
+          // this.$emit('closed', res.status === 200 ? true : false)
         } else {
           const res = await axios({
             method: 'POST',

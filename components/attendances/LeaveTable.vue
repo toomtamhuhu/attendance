@@ -93,6 +93,7 @@ export default {
       return {'color': this.$moment(date).locale('th').format('dddd') === 'อาทิตย์' ? 'red' : this.$moment(date).locale('th').format('dddd') === 'เสาร์' ? '#e000e1' : null}
     },
     changeTypeToObj(data, style) {
+      if (data.type === -2) return null
       if(typeof data.type === 'number') data.type = _.find(this.types, {'value': data.type})
       let work_rule = _.find(this.work_rules, {'id': data.work_rule_id})
 

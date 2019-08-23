@@ -28,10 +28,12 @@ export default {
           branch: true
         }
       })
-      return { leaves: _.reduce(leaves, (pre, cur) => {
+
+      const filteredLeaves = _.reduce(leaves, (pre, cur) => {
         if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0 && !cur.work_out_state) pre.push(cur)
         return pre
-        }, []) }
+      }, [])
+      return { leaves: _.orderBy(filteredLeaves, ['work_rule.work_start'], ['desc'])}
     } catch (e) {
       console.log(e)
     }

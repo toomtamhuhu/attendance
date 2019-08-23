@@ -111,7 +111,7 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'ชื่อ', value: 'employee.name'},
+          {text: 'ชื่อ', value: 'employee', callback: data => `${data.employee.name} (${data.employee.nickname})`},
           {
             text: 'วันที่',
             value: 'leave_date',
