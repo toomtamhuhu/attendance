@@ -21,6 +21,15 @@
                 label="ตัวย่อ"
             />
 
+            <v-switch v-model="form.night_shift" flat label="กะดึก'" color="indigo" />
+
+            <v-text-field
+                v-model="form.time"
+                label="เวลาสแกน"
+                type="time"
+                v-if="form.night_shift"
+            />
+
             <v-text-field
                 v-focus-next
                 v-model="form.work_start"
@@ -59,6 +68,7 @@
     <v-table :table="tableData">
       <span slot="work_start" slot-scope="{ data }">{{ `0000-01-01 ${data.work_start}` | moment('HH:mm') }}</span>
       <span slot="work_end" slot-scope="{ data }">{{ `0000-01-01 ${data.work_end}` | moment('HH:mm') }}</span>
+      <span slot="time" slot-scope="{ data }" v-if="data.night_shift">{{ `0000-01-01 ${data.time}` | moment('HH:mm') }}</span>
       <template slot="info" slot-scope="{ data }">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -100,7 +110,9 @@ export default {
         work_end: '12:00',
         ot: 0,
         note: null,
-        color: '#1CA085'
+        color: '#1CA085',
+        night_shift: false,
+        time: '00:00'
       }
     }
   },
@@ -116,6 +128,7 @@ export default {
           {text: 'ตัวย่อ', value: 'short_name'},
           {text: 'เข้างาน', value: 'work_start', slot: true},
           {text: 'ออกงาน', value: 'work_end', slot: true},
+          {text: 'สแกนกลางคืน', value: 'time', slot: true},
           {text: 'ข้อมูล', value: 'info', sortable: false, slot: true},
         ],
         desserts: this.work_rules
@@ -154,8 +167,8 @@ export default {
             method: 'POST',
             url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
             data: {
-              query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!) {
-              updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color) {
+              query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!, $night_shift: Boolean, $time: String) {
+              updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color, night_shift: $night_shift, time: $time) {
                   id
                   name
                   short_name
@@ -164,6 +177,8 @@ export default {
                   ot
                   note
                   color
+                  night_shift
+                  time
                 }
               }`,
               variables: {
@@ -174,7 +189,9 @@ export default {
                 work_end: this.form.work_end,
                 ot: this.form.ot,
                 note: this.form.note,
-                color: this.form.color
+                color: this.form.color,
+                night_shift: this.form.night_shift,
+                time: this.form.time
               }
             }
           })
@@ -184,8 +201,8 @@ export default {
             method: 'POST',
             url: 'http://hr.tsgoldprices.tk/graphql',
             data: {
-              query: `mutation ($name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!) {
-              createWorkRule(name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color) {
+              query: `mutation ($name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!, $night_shift: Boolean, $time: String) {
+              createWorkRule(name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color, night_shift: $night_shift, time: $time) {
                   id
                   name
                   short_name
@@ -194,6 +211,8 @@ export default {
                   ot
                   note
                   color
+                  night_shift
+                  time
                 }
               }`,
               variables: {
@@ -203,7 +222,9 @@ export default {
                 work_end: this.form.work_end,
                 ot: this.form.ot,
                 note: this.form.note,
-                color: this.form.color
+                color: this.form.color,
+                night_shift: this.form.night_shift,
+                time: this.form.time
               }
             }
           })
@@ -224,7 +245,9 @@ export default {
         work_end: null,
         ot: null,
         note: null,
-        color: '#1CA085'
+        color: '#1CA085',
+        night_shift: false,
+        time: '00:00'
       }
     },
     ...mapMutations({

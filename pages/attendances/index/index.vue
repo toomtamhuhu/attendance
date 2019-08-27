@@ -123,12 +123,14 @@ export default {
     },
     submit: _.debounce(async function () {
       try {
-        await this.$axios.$post('/v2/api/leaves/finger-print', {
+        const res = await this.$axios.$post('/v2/api/leaves/finger-print', {
           branch_id: this.filter.branch.id,
           employee_id: this.employee_id,
           leave_date: this.$moment().format('YYYY-MM-DD'),
           state: this.filter.state.value
         })
+        console.log(res)
+        this.noticeAlert(res)
         this.fetchData()
       } catch (e) {
         this.errorAlert(e)

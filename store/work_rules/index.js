@@ -46,6 +46,8 @@ export default {
                 ot
                 note
                 color
+                night_shift
+                time
               }
             }`
           }

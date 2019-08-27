@@ -1,8 +1,8 @@
 {
   "name": "attendance",
-  "version": "1.1.5",
-  "description": "Nuxt + Electron",
-  "author": "TOOMTAMHUHU <t.t.toomtam@hotmail.com>",
+  "version": "1.2.6",
+  "description": "Thongsuay",
+  "author": "Thongsuay Co.,Ltd.",
   "private": true,
   "main": "main.js",
   "build": {
