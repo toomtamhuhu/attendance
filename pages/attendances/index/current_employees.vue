@@ -7,6 +7,7 @@
         </template>
         <span slot="time" slot-scope="{ data }">{{ data.work_in_updated_at | moment('HH:mm') }}</span>
         <span slot="in_out" slot-scope="{ data }" v-if="data.work_rule">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
+        <span slot="force_time" slot-scope="{ data }">{{ `0000-01-01 ${data.force_time}` | moment('HH:mm') }}</span>
         <v-chip slot="late" slot-scope="{ data }" label :color="data.late === 0 ? 'success' : 'warning'" v-if="data.late !== null">{{ data.late | numeral }}</v-chip>
         <v-chip slot="wage" slot-scope="{ data }" label :color="data.wage === 0 ? 'error' : 'info'" v-if="data.late !== null">{{ data.wage | numeral }}</v-chip>
       </v-table>
@@ -59,6 +60,7 @@ export default {
           {text: 'กะ', value: 'work_rule', slot: true},
           {text: 'เวลา เข้า/ออก', value: 'in_out', slot: true},
           {text: 'ลงเวลา', value: 'time', slot: true},
+          {text: 'สแกนกะดึก', value: 'force_time', slot: true},
           {text: 'สาย (นาที)', value: 'late', slot: true},
           {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}
         ],

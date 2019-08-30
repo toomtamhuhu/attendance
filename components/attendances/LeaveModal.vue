@@ -38,20 +38,11 @@
                   v-model="form.description"
                   label="หมายเหตุ"
               />
-              <v-spacer></v-spacer>
-              <v-flex xs4>
-                <v-select
-                    v-model="form.certificate"
-                    :items="certificates"
-                    item-text="name"
-                    :return-object="true"
-                />
-              </v-flex>
             </v-form>
           </v-card-text>
           <v-card-actions>
             <v-spacer></v-spacer>
-            <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id && form.work_in_state === 0">ลบ</v-btn>
+            <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id">ลบ</v-btn>
             <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>
           </v-card-actions>
         </v-container>
@@ -88,8 +79,7 @@ export default {
         leave_date: this.$moment().format('YYYY-MM-DD'),
         description: null
       },
-      types: [{ value: -1, name: 'กะงาน'}, { value: 0, name: 'หยุด'}, { value: 1, name: 'ลากิจ'}, { value: 2, name: 'ลาป่วย'}],
-      certificates: [{ name: 'ไม่มีใบรับรอง', value: false}, { name: 'มีใบรับรอง', value: true }],
+      types: [{ value: -1, name: 'กะงาน'}, { value: 0, name: 'หยุด'}],
       selectedWorkRule: null,
       availableLeaves: {availableLeaves: 0, availableSickLeaves: 0, leavesLimits: 0, sickLeaveLimits: 0},
       mismatches: []
@@ -101,18 +91,15 @@ export default {
       if (data.open) {
         this.dialog = true
         this.getAvailableLeaves()
-        if (data.employee.gender === 'หญิง') this.types.push({ value: 3, name: 'ลาคลอด'})
         let leave = _.find(data.employee.leaves, {'leave_date': this.$moment(data.day).format('YYYY-MM-DD')})
         this.form = typeof leave === 'undefined' ? {
           employee_id: data.employee.id,
           leave_date: this.$moment(data.day).format('YYYY-MM-DD'),
-          certificate: this.certificates[0],
           type: this.types[0],
           description: null,
           work_rule_id: null
         } : leave
         if(typeof this.form.type === 'number' && this.form.type !== -2) this.form.type = _.find(this.types, {'value': this.form.type})
-        if(typeof this.form.certificate === 'number') this.form.certificate = _.find(this.certificates, {'value': this.form.certificate === 1 ? true : false})
       } else {
         const index = _.findIndex(this.types, { 'value': 3 } )
         if (index > -1) this.types.splice(index, 1)
@@ -148,14 +135,12 @@ export default {
       try {
         this.form.work_rule_id = this.form.type.value === -1 ? this.selectedWorkRule.id : null
         this.form.type = this.form.type.value
-        this.form.certificate = this.form.certificate.value
         if (this.form.id) {
           const res = await this.$axios.$put(`/v2/api/leaves/${this.form.id}`, {
             id: this.form.id,
             type: this.form.type,
             work_rule_id: this.form.work_rule_id,
-            description: this.form.description,
-            certificate: this.form.certificate
+            description: this.form.description
           })
           this.$emit('closed', res.status)
         } else {
@@ -163,14 +148,13 @@ export default {
             method: 'POST',
             url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
             data: {
-              query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $certificate: Int!, $work_in_state: Int) {
-              createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, certificate: $certificate, work_in_state: $work_in_state) {
+              query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $work_in_state: Int) {
+              createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, work_in_state: $work_in_state) {
                   employee_id
                   type
                   work_rule_id
                   leave_date
                   description
-                  certificate
                   work_in_state
                 }
               }`,
@@ -180,7 +164,6 @@ export default {
                 work_rule_id: this.form.work_rule_id,
                 leave_date: this.form.leave_date,
                 description: this.form.description,
-                certificate: this.form.certificate,
                 work_in_state: 0
               }
             }
@@ -209,7 +192,7 @@ export default {
                   work_rule_id
                   leave_date
                   description
-                  certificate
+
                 }
               }`,
             variables: {

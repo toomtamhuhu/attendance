@@ -57,7 +57,6 @@ export default {
       } else if (this.value && typeof this.value !== 'undefined') {
         this.selectedBranch = _.find(this.branches, {'id': this.value.id})
       } else {
-        // console.log(this.branches, this.$store.getters['Branches/branch'](this.$auth.user.branch_id))
         this.selectedBranch = this.userCan('branch_selectable') ? this.branches[0] : _.find(this.branches, {'id': this.$store.getters['Branches/branch'](this.$auth.user.branch_id)})
       }
     })

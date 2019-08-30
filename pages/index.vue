@@ -12,9 +12,6 @@
 import { mapGetters } from 'vuex'
 
 export default {
-	async fetch ({ store }) {
-		store.dispatch('News/fetch')
-	},
 	computed: {
 		...mapGetters({
 			news: 'News/data'

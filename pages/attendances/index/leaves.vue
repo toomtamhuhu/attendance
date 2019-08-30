@@ -116,7 +116,7 @@ export default {
                   work_rule_id
                   leave_date
                   description
-                  certificate
+
                   work_in_state
                 }
               }
@@ -129,7 +129,8 @@ export default {
         })
         this.employees = res.data.data.employeeLeaveDateRangeQuery
       } catch (e) {
-        this.errorAlert(e)
+        console.log(e)
+        // this.errorAlert(e)
       }
       this.loading = false
     },

@@ -129,7 +129,6 @@ export default {
           leave_date: this.$moment().format('YYYY-MM-DD'),
           state: this.filter.state.value
         })
-        console.log(res)
         this.noticeAlert(res)
         this.fetchData()
       } catch (e) {

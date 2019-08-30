@@ -6,6 +6,7 @@ export default {
   state: {
     data: [],
     active: null,
+    branches: []
   },
 
   getters: {
@@ -30,7 +31,7 @@ export default {
   },
 
   actions: {
-    async fetch ({ commit }) {
+    async fetch ({ commit, state }) {
       try {
         const res = await axios({
           method: "GET",
@@ -44,7 +45,12 @@ export default {
             }`
           }
         })
-        commit('data', _.orderBy(res.data.data.branchesByDept, ['name']))
+        let g9 = _.find(res.data.data.branchesByDept, { 'id': 15 })
+        let ws = _.find(res.data.data.branchesByDept, { 'id': 16 })
+        let ch = _.find(res.data.data.branchesByDept, { 'id': 17 })
+        let fn = _.find(res.data.data.branchesByDept, { 'id': 21 })
+        state.branches.push(ws, ch, g9, fn)
+        commit('data', state.branches)
       } catch (e) {
         throw e
       }

@@ -14,4 +14,8 @@ export default async function ({ store, app }) {
     const userBranch = store.getters['Branches/branch'](store.state.auth.user.branch_id)
     store.commit('Branches/active', userBranch)
   }
+
+  if (store.state.News.data === null || store.state.News.data.length <= 0) {
+    await store.dispatch('News/fetch')
+  }
 }
