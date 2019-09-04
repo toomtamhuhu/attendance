@@ -130,7 +130,6 @@ export default {
       this.loading = false
     },
     async save() {
-      if (!this.checkMonth()) return
       this.loading = true
       try {
         this.form.work_rule_id = this.form.type.value === -1 ? this.selectedWorkRule.id : null
@@ -177,7 +176,6 @@ export default {
       }
     },
     async deleteLeave() {
-      if (!this.checkMonth()) return
       if (!confirm('ลบ?')) return
       this.loading = true
       try {
@@ -205,15 +203,6 @@ export default {
         this.errorAlert(e)
       }
       this.loading = false
-    },
-    checkMonth() {
-      let currentMonth = this.$moment(this.form.leave_date).startOf('month')
-      let lastMonth = this.$moment().startOf('month')
-      if (currentMonth.diff(lastMonth, 'months') < 0) {
-        this.errorAlert('ไม่สามารถแก้ไขวันหยุดย้อนหลังได้')
-        return false
-      }
-      return true
     }
   }
 }

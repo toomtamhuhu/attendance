@@ -132,6 +132,7 @@ export default {
         this.noticeAlert(res)
         this.fetchData()
       } catch (e) {
+        console.log(e)
         this.errorAlert(e)
       }
     }, 200),
