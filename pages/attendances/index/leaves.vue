@@ -28,7 +28,10 @@
           </v-dialog>
         </v-flex>
         <v-flex>
-          <v-btn outline color="success" @click="print" :loading="loading">ปริ้นกะงาน</v-btn>
+          <v-btn outline color="success" @click="print('leave')" :loading="loading">ปริ้นกะงาน</v-btn>
+        </v-flex>
+        <v-flex>
+          <v-btn outline color="info" @click="print('attendance')" :loading="loading">ปริ้นลงเวลา</v-btn>
         </v-flex>
       </v-layout>
       <LeaveTable v-if="!loading" :data="employees" :month="filter.month" @onCellClick="handleLeaveTableClick" />
@@ -116,7 +119,6 @@ export default {
                   work_rule_id
                   leave_date
                   description
-
                   work_in_state
                 }
               }
@@ -151,19 +153,20 @@ export default {
       }
       if (state) this.fetchData()
     },
-    async print () {
+    async print (reportType) {
       try {
         this.loading = true
         await this.$axios.$get(`/v2/api/leaves/attendance-report`, {
           'params' : {
             branch_id: this.filter.branch.id,
             from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
-            to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
+            to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD'),
+            report_type: reportType
           }
         })
 
         await this.$printReport({
-          file_name: `attendance_${this.filter.branch.id}_${this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD')}.pdf`,
+          file_name: `${reportType}_${this.filter.branch.id}_${this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD')}.pdf`,
           preview: true
         })
       } catch (e) {

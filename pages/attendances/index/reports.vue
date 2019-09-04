@@ -16,7 +16,7 @@
         </v-flex>
         <v-spacer />
         <v-flex>
-          <v-btn color="info" @click="fetchData" :loading="loading">ค้นหา</v-btn>
+          <v-btn color="info" @click="fetchData(false)" :loading="loading">ค้นหา</v-btn>
         </v-flex>
       </v-layout>
       <v-layout>
@@ -140,7 +140,7 @@ export default {
   },
 
   methods: {
-    async fetchData() {
+    async fetchData(print) {
       this.loading = true
       try {
         const res = await this.$axios.$get('/v2/api/leaves', {
@@ -153,17 +153,18 @@ export default {
           }
         })
 
-        this.leaves = this.filter.employee.length > 0 ? _.reduce(res, (pre, cur) => {
+        this.leaves = this.filter.employee.length > 0 ? _.orderBy(_.reduce(res, (pre, cur) => {
           let filteredEmployee = _.find(this.filter.employee, (item) => {
             return item.id === cur.employee_id
           })
           if (filteredEmployee && cur.type === -1) pre.push(cur)
           return pre
-        }, []) : _.reduce(res, (pre, cur) => {
+        }, []), ['leave_date']) : _.reduce(res, (pre, cur) => {
           if (cur.type === -1) pre.push(cur)
           return pre
         }, [])
       } catch (e) {
+        console.log(e)
         // this.errorAlert(e)
       }
       this.loading = false

@@ -2,7 +2,9 @@ import Vue from 'vue'
 import { ipcRenderer } from 'electron'
 
 Vue.prototype.$printReport = options => {
-  options.url = `http://hr.tsgoldprices.tk/storage/upload/pdf/${options.file_name}`
+  if (!process.env.reportUrl) return
+
+  options.url = `${process.env.reportUrl}${options.file_name}`
 
   ipcRenderer.send('print', options)
 

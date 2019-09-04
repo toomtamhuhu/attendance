@@ -27,7 +27,8 @@ module.exports = {
   dev: process.env.NODE_ENV === 'DEV',
   env: {
     clientSecret: process.env.clientSecret || '',
-    baseUrl:  process.env.baseUrl || 'http://localhost'
+    baseUrl:  process.env.baseUrl || 'http://localhost',
+    reportUrl: process.env.reportUrl || 'http://localhost/storage/upload/pdf/'
   },
   css: [
     '@/assets/css/global.css'
