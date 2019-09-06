@@ -16,7 +16,7 @@
         </v-flex>
         <v-spacer />
         <v-flex>
-          <v-btn color="info" @click="fetchData(false)" :loading="loading">ค้นหา</v-btn>
+          <v-btn color="info" @click="fetchData()" :loading="loading">ค้นหา</v-btn>
         </v-flex>
       </v-layout>
       <v-layout>
@@ -68,9 +68,6 @@
         <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
-        <span slot="in_out" slot-scope="{ data }" v-if="data.work_rule">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
-        <span slot="work_in" slot-scope="{ data }" v-if="data.work_in_updated_at !== null">{{ data.work_in_updated_at | moment('HH:mm') }}</span>
-        <span slot="work_out" slot-scope="{ data }" v-if="data.work_out_updated_at !== null">{{data.work_out_updated_at | moment('HH:mm')}}</span>
         <v-chip slot="late" slot-scope="{ data }" label :color="data.late === 0 ? 'success' : 'warning'" v-if="data.late !== null">{{ data.late | numeral }}</v-chip>
         <v-chip slot="wage" slot-scope="{ data }" label :color="data.wage === 0 ? 'error' : 'info'" v-if="data.late !== null">{{ data.wage | numeral }}</v-chip>
       </v-table>
@@ -111,16 +108,16 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'ชื่อ', value: 'employee', callback: data => `${data.employee.name} (${data.employee.nickname})`},
+          {text: 'ชื่อ', value: 'full_name'},
           {
             text: 'วันที่',
             value: 'leave_date',
             callback: data => this.$moment(data.leave_date).locale('th').format('DD/MM/YY')
           },
           {text: 'กะ', value: 'work_rule', slot: true},
-          {text: 'เวลา เข้า/ออก', value: 'in_out', slot: true},
-          {text: 'ลงเวลาเข้า', value: 'work_in', slot: true},
-          {text: 'ลงเวลาออก', value: 'work_out', slot: true},
+          {text: 'เวลา เข้า/ออก', value: 'in_out'},
+          {text: 'ลงเวลาเข้า', value: 'work_in'},
+          {text: 'ลงเวลาออก', value: 'work_out'},
           {text: 'สาย (นาที)', value: 'late', slot: true},
           {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}
         ],
@@ -140,7 +137,7 @@ export default {
   },
 
   methods: {
-    async fetchData(print) {
+    async fetchData() {
       this.loading = true
       try {
         const res = await this.$axios.$get('/v2/api/leaves', {
@@ -154,12 +151,20 @@ export default {
         })
 
         this.leaves = this.filter.employee.length > 0 ? _.orderBy(_.reduce(res, (pre, cur) => {
+          cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
+          cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+          cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null
+          cur.work_out = cur.work_out_updated_at ? `${this.$moment(cur.work_out_updated_at).format('HH:mm')}` : null
           let filteredEmployee = _.find(this.filter.employee, (item) => {
             return item.id === cur.employee_id
           })
           if (filteredEmployee && cur.type === -1) pre.push(cur)
           return pre
         }, []), ['leave_date']) : _.reduce(res, (pre, cur) => {
+          cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
+          cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+          cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null
+          cur.work_out = cur.work_out_updated_at ? `${this.$moment(cur.work_out_updated_at).format('HH:mm')}` : null
           if (cur.type === -1) pre.push(cur)
           return pre
         }, [])

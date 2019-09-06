@@ -68,9 +68,6 @@
         <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
-        <span slot="in_out" slot-scope="{ data }" v-if="data.work_rule">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
-        <span slot="time" slot-scope="{ data }" v-if="data.work_rule.time !== null">{{ `0000-01-01 ${data.work_rule.time}` | moment('HH:mm') }}</span>
-        <span slot="force_time" slot-scope="{ data }" v-if="data.force_time !== null">{{ `0000-01-01 ${data.force_time}` | moment('HH:mm') }}</span>
         <v-icon slot="check" slot-scope="{ data }" :color="data.force_time ? 'green' : 'red'">{{ data.force_time ? 'check' : 'close' }}</v-icon>
       </v-table>
     </div>
@@ -110,16 +107,16 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'ชื่อ', value: 'employee', callback: data => `${data.employee.name} (${data.employee.nickname})`},
+          {text: 'ชื่อ', value: 'full_name'},
           {
             text: 'วันที่',
             value: 'leave_date',
             callback: data => this.$moment(data.leave_date).locale('th').format('DD/MM/YY')
           },
           {text: 'กะ', value: 'work_rule', slot: true},
-          {text: 'เวลา เข้า/ออก', value: 'in_out', slot: true},
-          {text: 'เวลาสแกนกะดึก', value: 'time', slot: true},
-          {text: 'เวลาสแกนจริง', value: 'force_time', slot: true},
+          {text: 'เวลา เข้า/ออก', value: 'in_out'},
+          {text: 'เวลาสแกนกะดึก', value: 'time'},
+          {text: 'เวลาสแกนจริง', value: 'force_time'},
           {text: ' ', value: 'check', slot: true}
         ],
         desserts: this.leaves
@@ -152,12 +149,20 @@ export default {
         })
 
         this.leaves = this.filter.employee.length > 0 ? _.reduce(res, (pre, cur) => {
+          cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
+          cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+          cur.time = cur.work_rule_time !== null ? `${this.$moment(cur.work_rule.time).format('HH:mm')}` : null
+          cur.force_time = cur.force_time !== null ? `${this.$moment(cur.force_time).format('HH:mm')}` : null
           let filteredEmployee = _.find(this.filter.employee, (item) => {
             return item.id === cur.employee_id
           })
           if (filteredEmployee && cur.type === -1 && cur.work_rule.night_shift) pre.push(cur)
           return pre
         }, []) : _.reduce(res, (pre, cur) => {
+          cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
+          cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+          cur.time = cur.work_rule_time !== null ? `${this.$moment(cur.work_rule.time).format('HH:mm')}` : null
+          cur.force_time = cur.force_time !== null ? `${this.$moment(cur.force_time).format('HH:mm')}` : null
           if (cur.type === -1 && cur.work_rule.night_shift) pre.push(cur)
           return pre
         }, [])

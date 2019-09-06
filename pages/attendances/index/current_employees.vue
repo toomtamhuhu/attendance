@@ -31,6 +31,10 @@ export default {
       })
 
       const filteredLeaves = _.reduce(leaves, (pre, cur) => {
+        cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
+        cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+        cur.time = cur.work_rule_time !== null ? `${this.$moment(cur.work_rule.time).format('HH:mm')}` : null
+        cur.force_time = cur.force_time !== null ? `${this.$moment(cur.force_time).format('HH:mm')}` : null
         if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0 && !cur.work_out_state) pre.push(cur)
         return pre
       }, [])
@@ -50,7 +54,7 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'ชื่อ', value: 'employee', callback: data => `${data.employee.name} (${data.employee.nickname})`},
+          {text: 'ชื่อ', value: 'full_name'},
           {text: 'สถานที่', value: 'branch', callback: data => data.branch ? `${data.branch.name}` : '-'},
           {
             text: 'วันที่',
@@ -58,9 +62,9 @@ export default {
             callback: data => this.$moment(data.leave_date).locale('th').format('DD/MM/YY')
           },
           {text: 'กะ', value: 'work_rule', slot: true},
-          {text: 'เวลา เข้า/ออก', value: 'in_out', slot: true},
-          {text: 'ลงเวลา', value: 'time', slot: true},
-          {text: 'สแกนกะดึก', value: 'force_time', slot: true},
+          {text: 'เวลา เข้า/ออก', value: 'in_out'},
+          {text: 'ลงเวลา', value: 'time'},
+          {text: 'สแกนกะดึก', value: 'force_time'},
           {text: 'สาย (นาที)', value: 'late', slot: true},
           {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}
         ],
