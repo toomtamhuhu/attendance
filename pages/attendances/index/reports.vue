@@ -149,8 +149,9 @@ export default {
             workRule: true
           }
         })
+        const leaves = _.orderBy(res, ['leave_date'], ['desc'])
 
-        this.leaves = this.filter.employee.length > 0 ? _.orderBy(_.reduce(res, (pre, cur) => {
+        this.leaves = this.filter.employee.length > 0 ? _.reduce(leaves, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
           cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
           cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null
@@ -160,7 +161,7 @@ export default {
           })
           if (filteredEmployee && cur.type === -1) pre.push(cur)
           return pre
-        }, []), ['leave_date']) : _.reduce(res, (pre, cur) => {
+        }, []) : _.reduce(res, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
           cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
           cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null

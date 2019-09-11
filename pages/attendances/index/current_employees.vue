@@ -5,9 +5,6 @@
         <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
-        <span slot="time" slot-scope="{ data }">{{ data.work_in_updated_at | moment('HH:mm') }}</span>
-        <span slot="in_out" slot-scope="{ data }" v-if="data.work_rule">{{ `0000-01-01 ${data.work_rule.work_start}` | moment('HH:mm') }} / {{ `0000-01-01 ${data.work_rule.work_end}` | moment('HH:mm') }}</span>
-        <span slot="force_time" slot-scope="{ data }" v-if="data.force_time">{{ `0000-01-01 ${data.force_time}` | moment('HH:mm') }}</span>
         <v-chip slot="late" slot-scope="{ data }" label :color="data.late === 0 ? 'success' : 'warning'" v-if="data.late !== null">{{ data.late | numeral }}</v-chip>
         <v-chip slot="wage" slot-scope="{ data }" label :color="data.wage === 0 ? 'error' : 'info'" v-if="data.late !== null">{{ data.wage | numeral }}</v-chip>
       </v-table>
@@ -31,10 +28,11 @@ export default {
       })
 
       const filteredLeaves = _.reduce(leaves, (pre, cur) => {
+        console.log(cur)
         cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
-        cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
-        cur.time = cur.work_rule_time !== null ? `${this.$moment(cur.work_rule.time).format('HH:mm')}` : null
-        cur.force_time = cur.force_time !== null ? `${this.$moment(cur.force_time).format('HH:mm')}` : null
+        cur.in_out = cur.work_rule ? `${app.moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${app.moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+        cur.time = cur.work_rule !== null && cur.work_rule.night_shift ? `${app.moment(`0000-01-01 ${cur.work_rule.time}`).format('HH:mm')}` : null
+        cur.force_time = cur.force_time !== null ? `${app.moment(`0000-01-01 ${cur.force_time}`).format('HH:mm')}` : null
         if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0 && !cur.work_out_state) pre.push(cur)
         return pre
       }, [])
