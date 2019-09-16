@@ -64,7 +64,7 @@
         </v-flex>
       </v-layout>
       <v-divider class="my-3"/>
-      <v-table :table="tableData">
+      <v-table :table="tableData" :loading="loading">
         <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
@@ -108,6 +108,7 @@ export default {
     tableData() {
       const table = {
         headers: [
+          {text: 'id', value: 'id'},
           {text: 'ชื่อ', value: 'full_name'},
           {
             text: 'วันที่',
@@ -149,9 +150,9 @@ export default {
             workRule: true
           }
         })
-        const leaves = _.orderBy(res, ['leave_date'], ['desc'])
+        // const leaves = _.orderBy(res, ['leave_date'], ['desc'])
 
-        this.leaves = this.filter.employee.length > 0 ? _.reduce(leaves, (pre, cur) => {
+        const leaves = this.filter.employee.length > 0 ? _.reduce(res, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
           cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
           cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null
@@ -169,6 +170,8 @@ export default {
           if (cur.type === -1) pre.push(cur)
           return pre
         }, [])
+
+        this.leaves = _.orderBy(leaves, ['leave_date'], ['desc'])
       } catch (e) {
         console.log(e)
         // this.errorAlert(e)

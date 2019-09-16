@@ -17,7 +17,7 @@
         <v-flex />
       </v-layout>
       <v-divider class="my-3"/>
-      <v-table :table="tableData">
+      <v-table :table="tableData" :loading="loading">
         <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>

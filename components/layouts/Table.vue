@@ -21,7 +21,7 @@
           :headers="tableData.headers"
           :items="tableData.desserts"
           :rows-per-page-items="[25,50,100]"
-          :search="search"
+          :custom-sort="customSort"
           class="elevation-1"
       >
         <template v-slot:items="props">
@@ -47,6 +47,9 @@ export default {
   props: {
     table: {
       type: Object
+    },
+    loading: {
+      type: Boolean
     }
   },
 
@@ -84,14 +87,15 @@ export default {
     },
     customSort(items, index, isDescending) {
       items.sort((a, b) => {
+        let dateA = new Date(a.leave_date), dateB = new Date(b.leave_date)
         if (index === 'leave_date') {
           if (isDescending) {
-            return b.leave_date - a.leave_date;
+            return dateB - dateA
           } else {
-            return a.leave_date - b.leave_date;
+            return dateA - dateB
           }
         }
-        // return a - b
+        return dateB - dateA
       })
 
       return items
