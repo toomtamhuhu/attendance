@@ -22,7 +22,6 @@
           :items="tableData.desserts"
           :rows-per-page-items="[25,50,100]"
           :search="search"
-          :custom-sort="customSort"
           class="elevation-1"
       >
         <template v-slot:items="props">
@@ -84,15 +83,16 @@ export default {
       return v
     },
     customSort(items, index, isDescending) {
-      // items.sort((a, b) => {
-      //   if (index === 'calories') {
-      //     if (isDescending) {
-      //       return b.calories - a.calories;
-      //     } else {
-      //       return a.calories - b.calories;
-      //     }
-      //   }
-      // })
+      items.sort((a, b) => {
+        if (index === 'leave_date') {
+          if (isDescending) {
+            return b.leave_date - a.leave_date;
+          } else {
+            return a.leave_date - b.leave_date;
+          }
+        }
+        // return a - b
+      })
 
       return items
     }

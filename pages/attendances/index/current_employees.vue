@@ -28,7 +28,6 @@ export default {
       })
 
       const filteredLeaves = _.reduce(leaves, (pre, cur) => {
-        console.log(cur)
         cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
         cur.in_out = cur.work_rule ? `${app.moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${app.moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
         cur.time = cur.work_rule !== null && cur.work_rule.night_shift ? `${app.moment(`0000-01-01 ${cur.work_rule.time}`).format('HH:mm')}` : null

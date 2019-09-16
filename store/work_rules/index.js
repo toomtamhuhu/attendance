@@ -26,6 +26,10 @@ export default {
 
       Vue.set(state.data, index, payload)
     },
+    removeItem (state, payload) {
+      const index = _.findIndex(state.data, { 'id': payload.id })
+      state.data.splice(index, 1)
+    }
   },
 
   actions: {

@@ -144,21 +144,21 @@ export default {
     },
     async remove(data) {
       if (!confirm('ลบกะงาน?')) return
-      // await this.$apollo.mutate({
-      //   mutation: gql`mutation ($id: ID!) {
-      //     deleteUser(id: $id) {
-      //         id
-      //         name
-      //         username
-      //       }
-      //     }`,
-      //   variables: {
-      //     id: data.id
-      //   },
-      //   update: (store, {data: {deleteUser}}) => {
-      //     this.updateCache(store, deleteUser, 'deleted')
-      //   }
-      // })
+      const res = await axios({
+        method: 'POST',
+        url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
+        data: {
+          query: `mutation ($id: Int!) {
+              deleteWorkRule(id: $id) {
+                  id
+                }
+              }`,
+          variables: {
+            id: data.id
+          }
+        }
+      })
+      if(res.status === 200) this.removeItem(res.data.data.deleteWorkRule)
     },
     async save() {
       try {
@@ -199,7 +199,7 @@ export default {
         } else {
           const res = await axios({
             method: 'POST',
-            url: 'http://hr.tsgoldprices.tk/graphql',
+            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
             data: {
               query: `mutation ($name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!, $night_shift: Boolean, $time: String) {
               createWorkRule(name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color, night_shift: $night_shift, time: $time) {
