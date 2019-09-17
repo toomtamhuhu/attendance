@@ -108,7 +108,6 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'id', value: 'id'},
           {text: 'ชื่อ', value: 'full_name'},
           {
             text: 'วันที่',
@@ -117,8 +116,8 @@ export default {
           },
           {text: 'กะ', value: 'work_rule', slot: true},
           {text: 'เวลา เข้า/ออก', value: 'in_out'},
-          {text: 'ลงเวลาเข้า', value: 'work_in'},
-          {text: 'ลงเวลาออก', value: 'work_out'},
+          {text: 'ลงเข้า', value: 'work_in'},
+          {text: 'ลงออก', value: 'work_out'},
           {text: 'สาย (นาที)', value: 'late', slot: true},
           {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}
         ],
@@ -150,7 +149,6 @@ export default {
             workRule: true
           }
         })
-        // const leaves = _.orderBy(res, ['leave_date'], ['desc'])
 
         const leaves = this.filter.employee.length > 0 ? _.reduce(res, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`

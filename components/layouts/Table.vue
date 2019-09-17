@@ -22,6 +22,7 @@
           :items="tableData.desserts"
           :rows-per-page-items="[25,50,100]"
           :custom-sort="customSort"
+          :loading="loading"
           class="elevation-1"
       >
         <template v-slot:items="props">
@@ -88,6 +89,15 @@ export default {
     customSort(items, index, isDescending) {
       items.sort((a, b) => {
         let dateA = new Date(a.leave_date), dateB = new Date(b.leave_date)
+
+        if (index === 'work_rule') {
+          if (isDescending) {
+            return b.work_rule.short_name.localeCompare(a.work_rule.short_name)
+          } else {
+            return a.work_rule.short_name.localeCompare(b.work_rule.short_name)
+          }
+        }
+
         if (index === 'leave_date') {
           if (isDescending) {
             return dateB - dateA
@@ -95,6 +105,31 @@ export default {
             return dateA - dateB
           }
         }
+
+        if (index === 'in_out') {
+          if (isDescending) {
+            return b.in_out.localeCompare(a.in_out)
+          } else {
+            return a.in_out.localeCompare(b.in_out)
+          }
+        }
+
+        // if (index === 'work_in') {
+        //   if (isDescending) {
+        //     return b.work_in.localeCompare(a.work_in)
+        //   } else {
+        //     return a.work_in.localeCompare(b.work_in)
+        //   }
+        // }
+        //
+        // if (index === 'work_out') {
+        //   if (isDescending) {
+        //     return b.work_out.localeCompare(a.work_out)
+        //   } else {
+        //     return a.work_out.localeCompare(b.work_out)
+        //   }
+        // }
+
         return dateB - dateA
       })
 

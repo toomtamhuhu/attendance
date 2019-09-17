@@ -102,11 +102,8 @@ export default {
     async fetchData() {
       this.loading = true
       try {
-        const res = await axios({
-          method: 'POST',
-          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-          data: {
-            query: `query ($from: String, $to: String) {
+        const res = await this.$axios.$post('/graphql', {
+          query: `query ($from: String, $to: String) {
             employeeLeaveDateRangeQuery(branch_id: ${this.filter.branch.id}, from: $from, to: $to) {
                 id
                 nickname
@@ -123,13 +120,12 @@ export default {
                 }
               }
             }`,
-            variables: {
-              from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
-              to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
-            }
+          variables: {
+            from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
+            to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
           }
         })
-        this.employees = res.data.data.employeeLeaveDateRangeQuery
+        this.employees = res.data.employeeLeaveDateRangeQuery
       } catch (e) {
         console.log(e)
         // this.errorAlert(e)

@@ -64,8 +64,8 @@ export default {
           {text: 'วันที่', value: 'leave_date', callback: data => this.$moment(data.leave_date).locale('th').format('DD/MM/YY') },
           {text: 'กะ', value: 'work_rule', slot: true},
           {text: 'เวลา เข้า/ออก', value: 'in_out'},
-          {text: 'ลงเข้า', value: 'time_in', slot: true},
-          {text: 'ลงออก', value: 'time_out', slot: true},
+          {text: 'ลงเข้า', value: 'work_in'},
+          {text: 'ลงออก', value: 'work_out'},
           {text: 'สาย (นาที)', value: 'late', slot: true},
           {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}
         ],
@@ -114,6 +114,8 @@ export default {
           let duration = this.$moment.duration(end.diff(start))
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
           cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
+          cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null
+          cur.work_out = cur.work_out_updated_at ? `${this.$moment(cur.work_out_updated_at).format('HH:mm')}` : null
           if (duration.asHours() <= 24) pre.push(cur)
           return pre
         }, [])
