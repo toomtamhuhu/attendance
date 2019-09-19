@@ -60,7 +60,7 @@ export default {
     tableData() {
       const table = {
         headers: [
-          {text: 'ชื่อ', value: 'full_name'},
+          {text: 'ชื่อ', value: 'full_name', sortable: false},
           {text: 'วันที่', value: 'leave_date', callback: data => this.$moment(data.leave_date).locale('th').format('DD/MM/YY') },
           {text: 'กะ', value: 'work_rule', slot: true},
           {text: 'เวลา เข้า/ออก', value: 'in_out'},

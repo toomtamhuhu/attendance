@@ -8,22 +8,22 @@
           <v-spacer />
           <v-spacer />
           <v-text-field
-              v-if="tableData.search"
-              v-model="search"
-              append-icon="search"
-              label="ค้นหา"
-              single-line
-              hide-details
+            v-if="tableData.search"
+            v-model="search"
+            append-icon="search"
+            label="ค้นหา"
+            single-line
+            hide-details
           />
         </v-card-title>
       </div>
       <v-data-table
-          :headers="tableData.headers"
-          :items="tableData.desserts"
-          :rows-per-page-items="[25,50,100]"
-          :custom-sort="customSort"
-          :loading="loading"
-          class="elevation-1"
+        :headers="tableData.headers"
+        :items="tableData.desserts"
+        :rows-per-page-items="[25,50,100]"
+        :custom-sort="customSort"
+        :loading="loading"
+        class="elevation-1"
       >
         <template v-slot:items="props">
           <template v-for="(f, i) in tableData.headers">
@@ -88,49 +88,41 @@ export default {
     },
     customSort(items, index, isDescending) {
       items.sort((a, b) => {
-        let dateA = new Date(a.leave_date), dateB = new Date(b.leave_date)
+        // default sort by leave_date
+        if (isDescending) {
+          let v =_.findIndex(this.tableData.headers, (item) => {
+            return item.value === index
+          })
 
-        if (index === 'work_rule') {
-          if (isDescending) {
-            return b.work_rule.short_name.localeCompare(a.work_rule.short_name)
-          } else {
-            return a.work_rule.short_name.localeCompare(b.work_rule.short_name)
+          if (index === this.tableData.headers[v].value) {
+            if (a[`${this.tableData.headers[v].value}`] !== null && typeof a[`${this.tableData.headers[v].value}`] !== 'object') {
+              return a[`${this.tableData.headers[v].value}`].localeCompare(b[`${this.tableData.headers[v].value}`])
+            } else {
+              return a - b
+            }
           }
         }
 
-        if (index === 'leave_date') {
-          if (isDescending) {
-            return dateB - dateA
-          } else {
-            return dateA - dateB
-          }
-        }
-
-        if (index === 'in_out') {
-          if (isDescending) {
-            return b.in_out.localeCompare(a.in_out)
-          } else {
-            return a.in_out.localeCompare(b.in_out)
-          }
-        }
-
-        // if (index === 'work_in') {
-        //   if (isDescending) {
-        //     return b.work_in.localeCompare(a.work_in)
-        //   } else {
-        //     return a.work_in.localeCompare(b.work_in)
-        //   }
-        // }
+        // default sort by first column on table headers
+        // if (isDescending !== null) {
+        //   let v =_.findIndex(this.tableData.headers, (item) => {
+        //     return item.value === index
+        //   })
         //
-        // if (index === 'work_out') {
-        //   if (isDescending) {
-        //     return b.work_out.localeCompare(a.work_out)
-        //   } else {
-        //     return a.work_out.localeCompare(b.work_out)
+        //   if (index === this.tableData.headers[v].value) {
+        //     if (isDescending) {
+        //       return b[`${this.tableData.headers[v].value}`].localeCompare(a[`${this.tableData.headers[v].value}`])
+        //     } else {
+        //       return a[`${this.tableData.headers[v].value}`].localeCompare(b[`${this.tableData.headers[v].value}`])
+        //     }
         //   }
         // }
 
-        return dateB - dateA
+        if (a.leave_date) {
+          return b.leave_date.localeCompare(a.leave_date)
+        } else {
+          return b - a
+        }
       })
 
       return items

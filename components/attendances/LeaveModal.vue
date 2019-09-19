@@ -27,11 +27,11 @@
                       :return-object="true"
                   />
                 </v-flex>
-                <v-spacer></v-spacer>
+                <v-spacer />
                 <v-flex xs4 v-if="form.type.value === -1">
                   <WorkRuleSelector :value="form.work_rule_id" @input="data => selectedWorkRule = data"/>
                 </v-flex>
-                <v-flex/>
+                <v-flex />
               </v-layout>
               <v-text-field
                   v-focus-next
@@ -41,7 +41,7 @@
             </v-form>
           </v-card-text>
           <v-card-actions>
-            <v-spacer></v-spacer>
+            <v-spacer />
             <v-btn outline  color="error" flat @click="deleteLeave()" v-if="form.id">ลบ</v-btn>
             <v-btn outline  color="success" flat @click="save">ยืนยัน</v-btn>
           </v-card-actions>

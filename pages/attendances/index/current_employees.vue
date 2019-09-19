@@ -30,7 +30,7 @@ export default {
       const filteredLeaves = _.reduce(leaves, (pre, cur) => {
         cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
         cur.in_out = cur.work_rule ? `${app.moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${app.moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
-        cur.time = cur.work_rule !== null && cur.work_rule.night_shift ? `${app.moment(`0000-01-01 ${cur.work_rule.time}`).format('HH:mm')}` : null
+        cur.work_in = cur.work_in_updated_at ? `${app.moment(cur.work_in_updated_at).format('HH:mm')}` : null
         cur.force_time = cur.force_time !== null ? `${app.moment(`0000-01-01 ${cur.force_time}`).format('HH:mm')}` : null
         if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0 && !cur.work_out_state) pre.push(cur)
         return pre
@@ -60,7 +60,7 @@ export default {
           },
           {text: 'กะ', value: 'work_rule', slot: true},
           {text: 'เวลา เข้า/ออก', value: 'in_out'},
-          {text: 'ลงเวลา', value: 'time'},
+          {text: 'ลงเวลา', value: 'work_in'},
           {text: 'สแกนกะดึก', value: 'force_time'},
           {text: 'สาย (นาที)', value: 'late', slot: true},
           {text: 'เบี้ยเลี้ยง', value: 'wage', slot: true}

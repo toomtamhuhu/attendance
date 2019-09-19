@@ -48,7 +48,6 @@
 </template>
 
 <script>
-import axios from 'axios'
 import { mapGetters } from 'vuex'
 import BranchSelector from '@/components/layouts/BranchSelector'
 import LeaveTable from '@/components/attendances/LeaveTable'
@@ -141,6 +140,7 @@ export default {
       }
     },
     closedLeaveModal (state) {
+      console.log(state)
       this.selectedDate = {
         open: false,
         branch_id: null,
