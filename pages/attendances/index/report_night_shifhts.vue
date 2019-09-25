@@ -127,6 +127,7 @@ export default {
 
   watch: {
     async 'filter.branch'(data) {
+      this.filter.employee = []
       this.filteredEmployees = await _.reduce(this.employees, (pre, cur) => {
         if (cur.branch_id === data.id) pre.push(cur)
         return pre
