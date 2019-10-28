@@ -157,14 +157,14 @@ export default {
           let filteredEmployee = _.find(this.filter.employee, (item) => {
             return item.id === cur.employee_id
           })
-          if (filteredEmployee && cur.type === -1 && cur.work_rule.night_shift) pre.push(cur)
+          if (filteredEmployee && cur.type === -1 && cur.work_rule.night_shift && cur.employee.work_status) pre.push(cur)
           return pre
         }, []) : _.reduce(res, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
           cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
           cur.time = cur.work_rule !== null ? `${this.$moment(`0000-01-01 ${cur.work_rule.time}`).format('HH:mm')}` : null
           cur.force_time = cur.force_time !== null ? `${this.$moment(`0000-01-01 ${cur.force_time}`).format('HH:mm')}` : null
-          if (cur.type === -1 && cur.work_rule.night_shift) pre.push(cur)
+          if (cur.type === -1 && cur.work_rule.night_shift && cur.employee.work_status) pre.push(cur)
           return pre
         }, [])
 

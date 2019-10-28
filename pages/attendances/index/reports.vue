@@ -159,16 +159,17 @@ export default {
           let filteredEmployee = _.find(this.filter.employee, (item) => {
             return item.id === cur.employee_id
           })
-          if (filteredEmployee && cur.type === -1) pre.push(cur)
+          if (filteredEmployee && cur.type === -1 && cur.employee.work_status) pre.push(cur)
           return pre
         }, []) : _.reduce(res, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
           cur.in_out = cur.work_rule ? `${this.$moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${this.$moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
           cur.work_in = cur.work_in_updated_at ? `${this.$moment(cur.work_in_updated_at).format('HH:mm')}` : null
           cur.work_out = cur.work_out_updated_at ? `${this.$moment(cur.work_out_updated_at).format('HH:mm')}` : null
-          if (cur.type === -1) pre.push(cur)
+          if (cur.type === -1 && cur.employee.work_status) pre.push(cur)
           return pre
         }, [])
+        console.log(leaves)
 
         this.leaves = _.orderBy(leaves, ['leave_date'], ['desc'])
       } catch (e) {

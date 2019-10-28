@@ -32,7 +32,7 @@ export default {
         cur.in_out = cur.work_rule ? `${app.moment(`0000-01-01 ${cur.work_rule.work_start}`).format('HH:mm')} - ${app.moment(`0000-01-01 ${cur.work_rule.work_end}`).format('HH:mm')}` : null
         cur.work_in = cur.work_in_updated_at ? `${app.moment(cur.work_in_updated_at).format('HH:mm')}` : null
         cur.force_time = cur.force_time !== null ? `${app.moment(`0000-01-01 ${cur.force_time}`).format('HH:mm')}` : null
-        if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0 && !cur.work_out_state) pre.push(cur)
+        if (app.moment().diff(app.moment(cur.leave_date), 'days') === 0 && !cur.work_out_state && cur.employee.work_status) pre.push(cur)
         return pre
       }, [])
       return { leaves: _.orderBy(filteredLeaves, ['work_rule.work_start'], ['desc'])}

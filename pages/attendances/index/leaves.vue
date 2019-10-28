@@ -140,7 +140,6 @@ export default {
       }
     },
     closedLeaveModal (state) {
-      console.log(state)
       this.selectedDate = {
         open: false,
         branch_id: null,

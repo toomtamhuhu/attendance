@@ -141,7 +141,7 @@ export default {
             work_rule_id: this.form.work_rule_id,
             description: this.form.description
           })
-          this.$emit('closed', res.status)
+          this.$emit('closed', res.saved)
         } else {
           const res = await axios({
             method: 'POST',
