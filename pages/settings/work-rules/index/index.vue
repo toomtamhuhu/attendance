@@ -21,15 +21,6 @@
                 label="ตัวย่อ"
             />
 
-            <v-switch v-model="form.night_shift" flat label="กะดึก'" color="indigo" />
-
-            <v-text-field
-                v-model="form.time"
-                label="เวลาสแกน"
-                type="time"
-                v-if="form.night_shift"
-            />
-
             <v-text-field
                 v-focus-next
                 v-model="form.work_start"
@@ -60,6 +51,34 @@
               <swatches v-model="form.color" />
             </div>
 
+            <v-switch v-model="form.night_shift" flat label="กะดึก" color="indigo" />
+            
+            <div v-if="form.night_shift">
+              <v-text-field
+                v-model="time"
+                label="เวลาสแกน"
+                type="time"
+              />
+
+              <v-btn class="ma-2" tile outline color="success" @click="addTime()">
+                เพิ่ม
+              </v-btn>
+
+              <v-table :table="workruleTimeTable">
+                <span slot="time" slot-scope="{ data }">{{ `0000-01-01 ${data.time}` | moment('HH:mm') }}</span>
+                <template slot="remove" slot-scope="{ data }">
+                  <v-tooltip bottom>
+                    <template v-slot:activator="{ on }">
+                      <v-btn small outline fab color="error" v-on="on" @click="removeTime(data)">
+                        <v-icon>close</v-icon>
+                      </v-btn>
+                    </template>
+                    <span>ลบ</span>
+                  </v-tooltip>
+                </template>
+              </v-table>
+            </div>
+            
           </v-form>
         </v-card-text>
       </template>
@@ -112,8 +131,10 @@ export default {
         note: null,
         color: '#1CA085',
         night_shift: false,
-        time: '00:00'
-      }
+        time: '00:00',
+        times: []
+      },
+      time: '00:00'
     }
   },
 
@@ -128,10 +149,19 @@ export default {
           {text: 'ตัวย่อ', value: 'short_name'},
           {text: 'เข้างาน', value: 'work_start', slot: true},
           {text: 'ออกงาน', value: 'work_end', slot: true},
-          {text: 'สแกนกลางคืน', value: 'time', slot: true},
-          {text: 'ข้อมูล', value: 'info', sortable: false, slot: true},
+          {text: 'ข้อมูล', value: 'info', sortable: false, slot: true}
         ],
         desserts: this.work_rules
+      }
+      return table
+    },
+    workruleTimeTable() {
+      const table = {
+        headers: [
+          {text: 'เวลา', value: 'time', slot: true},
+          {text: 'ลบ', value: 'remove', sortable: false, slot: true}
+        ],
+        desserts: _.orderBy(this.form.times, ['time'])
       }
       return table
     }
@@ -144,97 +174,30 @@ export default {
     },
     async remove(data) {
       if (!confirm('ลบกะงาน?')) return
-      const res = await axios({
-        method: 'POST',
-        url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-        data: {
-          query: `mutation ($id: Int!) {
-              deleteWorkRule(id: $id) {
-                  id
-                }
-              }`,
-          variables: {
-            id: data.id
-          }
-        }
-      })
-      if(res.status === 200) this.removeItem(res.data.data.deleteWorkRule)
+      const res = await this.$axios.$delete(`v2/api/work-rules/${data.id}`)
+      this.removeItem(res.data)
     },
     async save() {
       try {
-        if (this.form.id) {
-          const res = await axios({
-            method: 'POST',
-            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-            data: {
-              query: `mutation ($id: Int!, $name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!, $night_shift: Boolean, $time: String) {
-              updateWorkRule(id: $id, name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color, night_shift: $night_shift, time: $time) {
-                  id
-                  name
-                  short_name
-                  work_start
-                  work_end
-                  ot
-                  note
-                  color
-                  night_shift
-                  time
-                }
-              }`,
-              variables: {
-                id: this.form.id,
-                name: this.form.name,
-                short_name: this.form.short_name,
-                work_start: this.form.work_start,
-                work_end: this.form.work_end,
-                ot: this.form.ot,
-                note: this.form.note,
-                color: this.form.color,
-                night_shift: this.form.night_shift,
-                time: this.form.time
-              }
-            }
-          })
-          if(res.status === 200) this.addItem(res.data.data.updateWorkRule)
-        } else {
-          const res = await axios({
-            method: 'POST',
-            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-            data: {
-              query: `mutation ($name: String!, $short_name: String!, $work_start: String!, $work_end: String!, $ot: Int!, $note: String, $color: String!, $night_shift: Boolean, $time: String) {
-              createWorkRule(name: $name, short_name: $short_name, work_start: $work_start, work_end: $work_end, ot: $ot, note: $note, color: $color, night_shift: $night_shift, time: $time) {
-                  id
-                  name
-                  short_name
-                  work_start
-                  work_end
-                  ot
-                  note
-                  color
-                  night_shift
-                  time
-                }
-              }`,
-              variables: {
-                name: this.form.name,
-                short_name: this.form.short_name,
-                work_start: this.form.work_start,
-                work_end: this.form.work_end,
-                ot: this.form.ot,
-                note: this.form.note,
-                color: this.form.color,
-                night_shift: this.form.night_shift,
-                time: this.form.time
-              }
-            }
-          })
-          if(res.status === 200) this.addItem(res.data.data.createWorkRule)
-        }
+        const res = await this.$axios.$post('v2/api/work-rules', this.form)
+        this.addItem(res.data)
+        this.noticeAlert(res)
       } catch (e) {
         console.log(e)
       } finally {
         this.resetForm()
       }
+    },
+    addTime () {
+      const index = _.findIndex(this.form.times, { 'time': this.time } )
+      if (index < 0) this.form.times.push({ 'time': this.time })
+      else this.errorAlert('เพิ่มเวลาซ้ำไม่ได้')
+    },
+    async removeTime(data) {
+      if (!confirm('ลบ?')) return
+      const res = await this.$axios.$delete(`v2/api/work-rule-times/${data.id}`)
+      const index = _.findIndex(this.form.times, { 'id': res.data.id })
+      this.form.times.splice(index, 1)
     },
     resetForm() {
       this.open = false
@@ -247,8 +210,9 @@ export default {
         note: null,
         color: '#1CA085',
         night_shift: false,
-        time: '00:00'
+        times: []
       }
+      this.time = '00:00'
     },
     ...mapMutations({
       addItem: 'WorkRules/addItem',

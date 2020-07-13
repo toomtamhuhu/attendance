@@ -175,4 +175,3 @@ ipcMain.on('setDefaultUser', (event, arg) => {
 		messageToRender(e)
 	}
 })
-

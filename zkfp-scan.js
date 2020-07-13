@@ -101,6 +101,7 @@ function DoRegister (template) {
     m_enrollIdx = 0;
     m_register = false;
     template = Buffer.from(ret.template)
+    console.log(template)
     if (0 == ret.status) {
       let base64data = template.toString('base64')
       fingerPrintToRender({
