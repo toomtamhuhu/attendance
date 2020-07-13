@@ -14,9 +14,7 @@
               :return-object="true"
           />
         </v-flex>
-        <v-flex>
-          <v-btn outline color="success" @click="submit()">button</v-btn>
-        </v-flex>
+        <v-flex />
       </v-layout>
       <v-divider class="my-3"/>
       <v-table :table="tableData" :loading="loading">
