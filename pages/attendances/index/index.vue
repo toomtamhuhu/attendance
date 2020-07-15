@@ -14,7 +14,9 @@
               :return-object="true"
           />
         </v-flex>
-        <v-flex />
+        <v-flex>
+          <v-btn color="success" @click="submit()">ok</v-btn>
+        </v-flex>
       </v-layout>
       <v-divider class="my-3"/>
       <v-table :table="tableData" :loading="loading">
@@ -128,7 +130,7 @@ export default {
       try {
         const res = await this.$axios.$post('/v2/api/leaves/finger-print', {
           branch_id: this.filter.branch.id,
-          employee_id: this.employee_id,
+          employee_id: 185,
           leave_date: this.$moment().format('YYYY-MM-DD'),
           state: this.filter.state.value
         })

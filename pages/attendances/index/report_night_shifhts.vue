@@ -68,8 +68,9 @@
         <template slot="work_rule" slot-scope="{ data }" v-if="data.work_rule">
           <v-chip label :color="data.work_rule.color">{{ data.work_rule.short_name }}</v-chip>
         </template>
-        <v-icon slot="check" slot-scope="{ data }" :color="data.force_time ? 'green' : 'red'">{{ data.force_time ? 'check' : 'close' }}</v-icon>
+        <v-icon slot="check" slot-scope="{ data }" :color="data.times.length === data.work_rule.times.length ? 'green' : 'red'" style="cursor: pointer;" @click="show(data)">{{ data.force_time ? 'check' : 'close' }}</v-icon>
       </v-table>
+      <NigthShiftModal :item="nightShiftModal" :closed="closeNightShiftModal" />
     </div>
   </v-page>
 </template>
@@ -77,10 +78,12 @@
 <script>
 import { mapGetters } from 'vuex'
 import BranchSelector from '@/components/layouts/BranchSelector'
+import NigthShiftModal from '@/components/attendances/NigthShiftModal'
 
 export default {
   components: {
-    BranchSelector
+    BranchSelector,
+    NigthShiftModal
   },
 
   data() {
@@ -95,7 +98,11 @@ export default {
       },
       loading: false,
       leaves: [],
-      filteredEmployees: []
+      filteredEmployees: [],
+      nightShiftModal: {
+        open: false,
+        data: null
+      }
     }
   },
 
@@ -115,9 +122,7 @@ export default {
           },
           {text: 'กะ', value: 'work_rule', slot: true},
           {text: 'เวลา เข้า/ออก', value: 'in_out'},
-          {text: 'เวลาสแกนกะดึก', value: 'time'},
-          {text: 'เวลาสแกนจริง', value: 'force_time'},
-          {text: ' ', value: 'check', slot: true}
+          {text: 'สแกนกะดึก', value: 'check', slot: true}
         ],
         desserts: this.leaves
       }
@@ -145,7 +150,8 @@ export default {
             from: this.$moment(this.filter.from_date).format('YYYY-MM-DD'),
             to: this.$moment(this.filter.to_date).format('YYYY-MM-DD'),
             withEmployee: true,
-            workRule: true
+            workRule: true,
+            times: true
           }
         })
 
@@ -175,6 +181,18 @@ export default {
       }
       this.loading = false
     },
+    show (data) {
+      this.nightShiftModal = {
+        open: true,
+        data: data
+      }
+    },
+    closeNightShiftModal () {
+      this.nightShiftModal = {
+        open: false,
+        data: null
+      }
+    }
   }
 }
 </script>
