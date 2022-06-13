@@ -26,13 +26,13 @@ npm config set msvs_version 2015 --global
 
 Go to `/node_modules/node-sass` directory
 ```
-node-gyp rebuild --target=11.4.7 --arch=x64 --dist-url=https://atom.io/download/atom-shell --verbose --libsass_ext= --libsass_cflags= --libsass_ldflags= --libsass_library=
+node-gyp rebuild --target=2.0.18 --arch=x64 --dist-url=https://atom.io/download/atom-shell --verbose --libsass_ext= --libsass_cflags= --libsass_ldflags= --libsass_library=
 ```
 or
 ```
-../.bin/node-gyp rebuild --target=11.4.7 --arch=x64 --dist-url=https://atom.io/download/atom-shell --verbose --libsass_ext= --libsass_cflags= --libsass_ldflags= --libsass_library=
+../.bin/node-gyp rebuild --target=2.0.18 --arch=x64 --dist-url=https://atom.io/download/atom-shell --verbose --libsass_ext= --libsass_cflags= --libsass_ldflags= --libsass_library=
 ```
-11.4.7 is Electron version
+2.0.18 is Electron version
 
 The output will be inside build/Release/binding.node Then you can copy that file into your `node_modules/node-sass/vendor/<some-thing>` folder.
 
@@ -42,6 +42,6 @@ cd c_addons/zkfp
 
 node-gyp configure build
 
-node-gyp rebuild --target=11.4.7 --arch=x64 --dist-url=https://electronjs.org/headers
+node-gyp rebuild --target=2.0.18 --arch=x64 --dist-url=https://electronjs.org/headers
 ```
 if error `iojs.lib`, delete `/usr/.node-gyp` and re-install `npm install node-gyp -g`

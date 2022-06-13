@@ -98,10 +98,8 @@ export default {
       let work_rule = _.find(this.work_rules, {'id': data.work_rule_id})
 
       if (style) {
-        if (typeof data.type === 'undefined') return
         return data.type.value === -1 ? typeof work_rule !== 'undefined' ? work_rule.color : null : data.type.value === 1 ? '#36f' : data.type.value === 2 ? '#f63' : data.type.value === 4 ? 'green' : '#852'
       } else {
-        if (typeof data.type === 'undefined') return
         return data.type.value === -1
           ? typeof work_rule !== 'undefined'
             ? work_rule.short_name

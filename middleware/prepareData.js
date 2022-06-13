@@ -1,7 +1,7 @@
 import { ipcRenderer } from 'electron'
 
 export default async function ({ store, app }) {
-  if (store.state.Employees.data === null || store.state.Employees.data.length <= 0) store.dispatch('Employees/fetch', { work_status: true, with: ['branch'], branch_ids: [15, 16, 17, 20, 21, 22] }).then(() => {
+  if (store.state.Employees.data === null || store.state.Employees.data.length <= 0) store.dispatch('Employees/fetch').then(() => {
     ipcRenderer.send('initEmployeeFingerPrint', store.getters['Employees/data'])
   })
 
@@ -10,7 +10,7 @@ export default async function ({ store, app }) {
   if (store.state.serverTime === null) store.dispatch('serverTime')
 
   if (store.state.Branches.data === null || store.state.Branches.data.length <= 0) {
-    await store.dispatch('Branches/fetch', { department_ids: [3, 4, 6, 8, 9] })
+    await store.dispatch('Branches/fetch')
     const userBranch = store.getters['Branches/branch'](store.state.auth.user.branch_id)
     store.commit('Branches/active', userBranch)
   }

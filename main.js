@@ -33,12 +33,7 @@ const ZKFPScan = require('./zkfp-scan')
 
 const newWin = () => {
 	win = new electron.BrowserWindow({
-		icon: path.join(__dirname, 'static/icon.png'),
-		webPreferences: {
-			nodeIntegration: true,
-			contextIsolation: false,
-			enableRemoteModule: true
-		}
+		icon: path.join(__dirname, 'static/icon.png')
 	})
 	win.maximize()
 	win.on('close', e => {

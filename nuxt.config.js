@@ -1,5 +1,4 @@
 require('dotenv').config()
-const webpack = require('webpack')
 
 module.exports = {
   mode: 'spa',
@@ -24,11 +23,6 @@ module.exports = {
       'moment',
       'numeral'
     ],
-    plugins: [
-      new webpack.ProvidePlugin({
-        _: 'lodash'
-      })
-    ]
   },
   dev: process.env.NODE_ENV === 'DEV',
   env: {
@@ -64,7 +58,7 @@ module.exports = {
           },
           logout: false,
           user: {
-            url: '/v2/api/user',
+            url: 'v2/api/user',
             propertyName: false
           }
         }
@@ -75,7 +69,6 @@ module.exports = {
     baseURL: process.env.baseUrl || 'http://localhost',
     headers: {
       'X-Requested-With': 'XMLHttpRequest'
-    },
-    rejectUnauthorized: false
+    }
   }
 }

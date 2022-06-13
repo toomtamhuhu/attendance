@@ -3,7 +3,9 @@ import { ipcRenderer } from 'electron'
 
 Vue.prototype.$printReport = options => {
   if (!process.env.reportUrl) return
-  options.file_name = `${options.report_type}${Date.now()}.pdf`
+
+  options.url = `${process.env.reportUrl}${options.file_name}`
+
   ipcRenderer.send('print', options)
 
   return new Promise((resolve, reject) =>
