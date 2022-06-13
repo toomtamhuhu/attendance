@@ -64,9 +64,9 @@ import { mapGetters } from 'vuex'
 import ManageFingerPrintModal from '@/components/finger-prints/ManageFingerPrintModal'
 
 export default {
-  async fetch ({ store }) {
-    store.dispatch('Employees/fetch')
-  },
+  // async fetch ({ store }) {
+  //   store.dispatch('Employees/fetch')
+  // },
 
   components: {
     ManageFingerPrintModal
@@ -126,37 +126,13 @@ export default {
 
       this.deletting = true
       try {
-        const res = await axios({
-          method: 'POST',
-          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-          data: {
-            query: `mutation ($id: Int!, $finger_print1: String, $finger_print2: String) {
-              updateEmployeeFingerPrint(id: $id, finger_print1: $finger_print1, finger_print2: $finger_print2) {
-                  id
-                  name
-                  nickname
-                  finger_print1
-                  finger_print2
-                  branch_id
-                  branch {
-                    name
-                  }
-                }
-              }`,
-            variables: {
-              id: employee.id,
-              finger_print1: null,
-              finger_print2: null
-            }
-          }
-        })
-
+        const res = await this.$axios.$post(`/v2/api/employees/${employee.id}/remove-finger-print`)
         const finger_print = ipcRenderer.sendSync('deleteFingerTemplate', {
-          id: res.data.data.updateEmployeeFingerPrint.id,
+          id: res.saved.id
         })
 
         this.noticeAlert(finger_print)
-        this.updateFingerPrint(res.data.data.updateEmployeeFingerPrint)
+        this.updateFingerPrint(res.saved)
       } catch (e) {
         console.log(e)
       } finally {

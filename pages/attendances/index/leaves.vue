@@ -101,30 +101,15 @@ export default {
     async fetchData() {
       this.loading = true
       try {
-        const res = await this.$axios.$post('/graphql', {
-          query: `query ($from: String, $to: String) {
-            employeeLeaveDateRangeQuery(branch_id: ${this.filter.branch.id}, from: $from, to: $to) {
-                id
-                nickname
-                name
-                gender
-                leaves {
-                  id
-                  employee_id
-                  type
-                  work_rule_id
-                  leave_date
-                  description
-                  work_in_state
-                }
-              }
-            }`,
-          variables: {
-            from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
-            to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
-          }
-        })
-        this.employees = res.data.employeeLeaveDateRangeQuery
+        const res = await this.$axios.$get('/v2/api/employees/leave-date-range', {
+					'params': {
+						branch_id: this.filter.branch.id,
+						from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
+						to: this.$moment(this.filter.month).endOf('month').format('YYYY-MM-DD')
+					}
+				})
+        
+        this.employees = res
       } catch (e) {
         console.log(e)
         // this.errorAlert(e)
@@ -151,7 +136,7 @@ export default {
     async print (reportType) {
       try {
         this.loading = true
-        await this.$axios.$get(`/v2/api/leaves/attendance-report`, {
+        const res = await this.$axios.$get(`/v2/api/leaves/attendance-report`, {
           'params' : {
             branch_id: this.filter.branch.id,
             from: this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD'),
@@ -161,7 +146,8 @@ export default {
         })
 
         await this.$printReport({
-          file_name: `${reportType}_${this.filter.branch.id}_${this.$moment(this.filter.month).startOf('month').format('YYYY-MM-DD')}.pdf`,
+          report_type: reportType,
+          url: res,
           preview: true
         })
       } catch (e) {

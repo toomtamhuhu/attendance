@@ -72,10 +72,12 @@ void zkfpm_set_parameters(const FunctionCallbackInfo<Value>& args) {
 
 	int status = ZKFPM_SetParameters(device, code, (unsigned char*)&paramValue, size);
 
+  Local<Context> context = isolate->GetCurrentContext();
+
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
-	result->Set(String::NewFromUtf8(isolate, "value"), Number::New(isolate, paramValue));
-	result->Set(String::NewFromUtf8(isolate, "size"), Number::New(isolate, size));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
+	result->Set(context, String::NewFromUtf8(isolate, "value", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, paramValue));
+	result->Set(context, String::NewFromUtf8(isolate, "size", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, size));
   args.GetReturnValue().Set(result);
 }
 
@@ -94,10 +96,12 @@ void zkfpm_get_parameters(const FunctionCallbackInfo<Value>& args) {
 
 	int status = ZKFPM_GetParameters(device, code, (unsigned char*)&paramValue, &size);
 
+  Local<Context> context = isolate->GetCurrentContext();
+  
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
-	result->Set(String::NewFromUtf8(isolate, "value"), Number::New(isolate, paramValue));
-	result->Set(String::NewFromUtf8(isolate, "size"), Number::New(isolate, size));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
+	result->Set(context, String::NewFromUtf8(isolate, "value", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, paramValue));
+	result->Set(context, String::NewFromUtf8(isolate, "size", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, size));
   args.GetReturnValue().Set(result);
 }
 
@@ -118,11 +122,21 @@ void zkfpm_acquire_fingerprint(const FunctionCallbackInfo<Value>& args) {
 
 	int status = ZKFPM_AcquireFingerprint(device, fpImage, cbFPImage, fpTemplate, &cbTemplate);
 
+  Local<Context> context = isolate->GetCurrentContext();
+
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
-	result->Set(String::NewFromUtf8(isolate, "image"),  ArrayBuffer::New(isolate, fpImage, cbFPImage));
-	result->Set(String::NewFromUtf8(isolate, "template"), ArrayBuffer::New(isolate, fpTemplate, cbTemplate));
-	result->Set(String::NewFromUtf8(isolate, "template_size"), Number::New(isolate, cbTemplate));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
+	result->Set(
+    context,
+    String::NewFromUtf8(isolate, "image", NewStringType::kNormal).ToLocalChecked(),
+    Buffer::Copy(isolate, (const char *)fpImage, cbFPImage).ToLocalChecked()
+  );
+	result->Set(
+    context,
+    String::NewFromUtf8(isolate, "template", NewStringType::kNormal).ToLocalChecked(),
+    Buffer::Copy(isolate, (const char *)fpTemplate,  cbTemplate).ToLocalChecked()
+  );
+	result->Set(context, String::NewFromUtf8(isolate, "template_size", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, cbTemplate));
   args.GetReturnValue().Set(result);
 }
 
@@ -134,15 +148,16 @@ void zkfpm_db_match(const FunctionCallbackInfo<Value>& args) {
     isolate->ThrowException(Exception::TypeError(String::NewFromUtf8(isolate, "Wrong number of arguments",NewStringType::kNormal).ToLocalChecked()));
     return;
   }
-  unsigned char* m_arrPreRegTemps = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]->ToObject()));
+  unsigned char* m_arrPreRegTemps = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]));
   unsigned int m_arrPreTempsLen = args[1].As<Number>()->Value();
-  unsigned char* temp =  reinterpret_cast<unsigned char*>(Buffer::Data(args[2]->ToObject()));
+  unsigned char* temp =  reinterpret_cast<unsigned char*>(Buffer::Data(args[2]));
   unsigned int cbTemplate = args[3].As<Number>()->Value();
 
   int status = ZKFPM_DBMatch(DB, m_arrPreRegTemps, m_arrPreTempsLen, temp, cbTemplate);
 
+  Local<Context> context = isolate->GetCurrentContext();
 	Local<Object> result = Object::New(isolate);
-  result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
+  result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
   args.GetReturnValue().Set(result);
 }
 
@@ -155,18 +170,24 @@ void zkfpm_db_merge(const FunctionCallbackInfo<Value>& args) {
     return;
   }
 
-	unsigned char* RegTemp_1 = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]->ToObject()));
-	unsigned char* RegTemp_2 = reinterpret_cast<unsigned char*>(Buffer::Data(args[1]->ToObject()));
-	unsigned char* RegTemp_3 = reinterpret_cast<unsigned char*>(Buffer::Data(args[2]->ToObject()));
-//	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[3]->ToObject()));
+	unsigned char* RegTemp_1 = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]));
+	unsigned char* RegTemp_2 = reinterpret_cast<unsigned char*>(Buffer::Data(args[1]));
+	unsigned char* RegTemp_3 = reinterpret_cast<unsigned char*>(Buffer::Data(args[2]));
+//	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[3]));
 	unsigned int cbTemplate = args[3].As<Number>()->Value();
 	unsigned char* temp = new unsigned char[cbTemplate];
 
 	int status = ZKFPM_DBMerge(DB, RegTemp_1, RegTemp_2, RegTemp_3, temp, &cbTemplate);
 
+  Local<Context> context = isolate->GetCurrentContext();
+
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
-	result->Set(String::NewFromUtf8(isolate, "template"), ArrayBuffer::New(isolate, temp, cbTemplate));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
+	result->Set(
+      context,
+      String::NewFromUtf8(isolate, "template", NewStringType::kNormal).ToLocalChecked(),
+      Buffer::Copy(isolate, (const char *)temp, cbTemplate).ToLocalChecked()
+  );
   args.GetReturnValue().Set(result);
 }
 
@@ -180,15 +201,21 @@ void zkfpm_db_add(const FunctionCallbackInfo<Value>& args) {
   }
 
   unsigned int id = args[0].As<Number>()->Value();
-	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[1]->ToObject()));
+	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[1]));
 	unsigned int cbTemplate = args[2].As<Number>()->Value();
 //	unsigned char* temp = new unsigned char[cbTemplate];
 
 	int status = ZKFPM_DBAdd(DB, id, temp, cbTemplate);
 
+  Local<Context> context = isolate->GetCurrentContext();
+
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
-	result->Set(String::NewFromUtf8(isolate, "template"), ArrayBuffer::New(isolate, temp, cbTemplate));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
+	result->Set(
+    context,
+    String::NewFromUtf8(isolate, "template", NewStringType::kNormal).ToLocalChecked(),
+    Buffer::Copy(isolate, (const char *)temp, cbTemplate).ToLocalChecked()
+  );
   args.GetReturnValue().Set(result);
 }
 
@@ -201,18 +228,20 @@ void zkfpm_db_identify(const FunctionCallbackInfo<Value>& args) {
     return;
   }
 
-//	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]->ToObject()));
-	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]->ToObject()));
+//	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]));
+	unsigned char* temp = reinterpret_cast<unsigned char*>(Buffer::Data(args[0]));
 	unsigned int len = args[1].As<Number>()->Value();
 	unsigned int id = 0;
 	unsigned int score = 0;
 
 	int status = ZKFPM_DBIdentify(DB, temp, len, &id, &score);
 
+  Local<Context> context = isolate->GetCurrentContext();
+  
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
-	result->Set(String::NewFromUtf8(isolate, "id"), Number::New(isolate, id));
-	result->Set(String::NewFromUtf8(isolate, "score"), Number::New(isolate, score));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
+	result->Set(context, String::NewFromUtf8(isolate, "id", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, id));
+	result->Set(context, String::NewFromUtf8(isolate, "score", NewStringType::kNormal).ToLocalChecked(), Number::New(isolate, score));
   args.GetReturnValue().Set(result);
 }
 
@@ -229,8 +258,10 @@ void zkfpm_db_del(const FunctionCallbackInfo<Value>& args) {
 
 	int status = ZKFPM_DBDel(DB, id);
 
+  Local<Context> context = isolate->GetCurrentContext();
+
 	Local<Object> result = Object::New(isolate);
-	result->Set(String::NewFromUtf8(isolate, "status"),  Number::New(isolate, status));
+	result->Set(context, String::NewFromUtf8(isolate, "status", NewStringType::kNormal).ToLocalChecked(),  Number::New(isolate, status));
   args.GetReturnValue().Set(result);
 }
 

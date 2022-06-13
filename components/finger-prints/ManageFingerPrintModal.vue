@@ -133,66 +133,16 @@ export default {
     async save () {
       this.submitting = true
       try {
-        const res = await axios({
-          method: 'POST',
-          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-          data: {
-            query: `mutation ($id: Int!, $finger_print1: String, $finger_print2: String) {
-              updateEmployeeFingerPrint(id: $id, finger_print1: $finger_print1, finger_print2: $finger_print2) {
-                  id
-                  name
-                  nickname
-                  finger_print1
-                  finger_print2
-                  branch_id
-                  branch {
-                    name
-                  }
-                }
-              }`,
-            variables: {
-              id: this.data.id,
-              finger_print1: this.form.finger_print1,
-              finger_print2: this.form.finger_print2
-            }
-          }
-        })
+        const res = await this.$axios.$post(`/v2/api/employees/${this.data.id}/add-finger-print`, this.form)
+
         const finger_print = ipcRenderer.sendSync('addFingerTemplate', {
-          id: res.data.data.updateEmployeeFingerPrint.id,
+          id: res.saved.id,
           finger: this.number,
           template: this.number === 1 ? this.form.finger_print1 : this.form.finger_print2
         })
 
-        if (!finger_print.status) {
-          await axios({
-            method: 'POST',
-            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-            data: {
-              query: `mutation ($id: Int!, $finger_print1: String, $finger_print2: String) {
-              updateEmployeeFingerPrint(id: $id, finger_print1: $finger_print1, finger_print2: $finger_print2) {
-                  id
-                  name
-                  nickname
-                  finger_print1
-                  finger_print2
-                  branch_id
-                  branch {
-                    name
-                  }
-                }
-              }`,
-              variables: {
-                id: this.data.id,
-                finger_print1: this.number === 1 ? this.data.finger_print1 : null,
-                finger_print2: this.number === 2 ? this.data.finger_print2 : null
-              }
-            }
-          })
-        }
-
-        if(res.status === 200 && finger_print.status) this.$emit('onSubmitted', res.data.data.updateEmployeeFingerPrint)
-        this.noticeAlert(finger_print)
-
+        if (!finger_print.status) return this.errorAlert('ไม่สำเร็จ!')
+        this.$emit('onSubmitted', res.saved)
       } catch (e) {
         this.errorAlert(e)
       } finally {

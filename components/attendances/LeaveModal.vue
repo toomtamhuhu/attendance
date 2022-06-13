@@ -143,31 +143,8 @@ export default {
           })
           this.$emit('closed', res.saved)
         } else {
-          const res = await axios({
-            method: 'POST',
-            url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-            data: {
-              query: `mutation ($employee_id: Int!, $type: Int!, $work_rule_id: Int, $leave_date: String!, $description: String, $work_in_state: Int) {
-              createLeave(employee_id: $employee_id, type: $type, work_rule_id: $work_rule_id, leave_date: $leave_date, description: $description, work_in_state: $work_in_state) {
-                  employee_id
-                  type
-                  work_rule_id
-                  leave_date
-                  description
-                  work_in_state
-                }
-              }`,
-              variables: {
-                employee_id: this.form.employee_id,
-                type: this.form.type,
-                work_rule_id: this.form.work_rule_id,
-                leave_date: this.form.leave_date,
-                description: this.form.description,
-                work_in_state: 0
-              }
-            }
-          })
-          this.$emit('closed', res.status === 200 ? true : false)
+          const res = await this.$axios.$post(`/v2/api/leaves`, { ...this.form, work_in_state: 0, branch_id : this.data.branch_id })
+          this.$emit('closed', res.saved)
         }
       } catch (e) {
         this.errorAlert(e)

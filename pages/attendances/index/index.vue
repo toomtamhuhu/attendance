@@ -106,7 +106,8 @@ export default {
             to: this.$moment().endOf('month').format('YYYY-MM-DD'),
             state: this.filter.state.value,
             withEmployee: true,
-            workRule: true
+            workRule: true,
+            times: true
           }
         })
         const leaves = _.orderBy(res, ['leave_date'], ['desc'])
@@ -130,7 +131,8 @@ export default {
       try {
         const res = await this.$axios.$post('/v2/api/leaves/finger-print', {
           branch_id: this.filter.branch.id,
-          employee_id: 185,
+          // employee_id: this.employee_id,
+          employee_id: 190,
           leave_date: this.$moment().format('YYYY-MM-DD'),
           state: this.filter.state.value
         })

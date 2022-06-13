@@ -77,6 +77,10 @@
     "nodedir": "C:\\Users\\TOOMTAM\\AppData\\Local\\node-gyp\\Cache\\11.4.7",
     "standalone_static_library": 1,
     "msbuild_path": "C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\MSBuild\\Current\\Bin\\MSBuild.exe",
-    "target": "11.4.7"
+    "target": "11.4.7",
+    "libsass_ext": "",
+    "libsass_cflags": "",
+    "libsass_ldflags": "",
+    "libsass_library": ""
   }
 }

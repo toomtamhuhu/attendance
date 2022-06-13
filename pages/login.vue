@@ -70,10 +70,11 @@ export default {
         })
         this.$router.push('/')
       } catch (e) {
+        console.log(e)
         this.errorAlert(e)
         this.loading = false
       }
-    }, 300),
+    }, 300)
   }
 }
 </script>

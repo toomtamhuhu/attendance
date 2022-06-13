@@ -150,6 +150,7 @@ export default {
             workRule: true
           }
         })
+        console.log(res)
 
         const leaves = this.filter.employee.length > 0 ? _.reduce(res, (pre, cur) => {
           cur.full_name = `${cur.employee.name} (${cur.employee.nickname})`
@@ -169,7 +170,6 @@ export default {
           if (cur.type === -1 && cur.employee.work_status) pre.push(cur)
           return pre
         }, [])
-        console.log(leaves)
 
         this.leaves = _.orderBy(leaves, ['leave_date'], ['desc'])
       } catch (e) {

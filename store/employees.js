@@ -27,28 +27,10 @@ export default {
   },
 
   actions: {
-    async fetch ({ commit }) {
+    async fetch ({ commit, state }, payload) {
       try {
-        const res = await axios({
-          method: "GET",
-          url: process.env.graphqlUrl || 'http://hr.tsgoldprices.tk/graphql',
-          data: {
-            query: `{
-            employees(work_status: true, branch_id: [15, 16, 17, 21]) {
-                id
-                name
-                nickname
-                finger_print1
-                finger_print2
-                branch_id
-                branch {
-                  name
-                }
-              }
-            }`
-          }
-        })
-        commit('data', _.orderBy(res.data.data.employees, ['branch_id']))
+        const res = await this.$axios.$get('/v2/api/employees/filter', { 'params': payload })
+        commit('data', _.orderBy(res, ['branch_id']))
       } catch (e) {
         throw e
       }
